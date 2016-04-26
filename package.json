@@ -1,0 +1,24 @@
+{
+  "name": "project2",
+  "version": "1.0.0",
+  "description": "\"Project 2 sample code\"",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^3.21.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bisaysavath/Cinder.git"
+  },
+  "author": "B.S.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bisaysavath/Cinder/issues"
+  },
+  "homepage": "https://github.com/bisaysavath/Cinder#readme"
+}
