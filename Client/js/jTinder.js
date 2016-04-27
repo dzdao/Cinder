@@ -2,8 +2,8 @@
  * jTinder initialization
  */
 
-var likedComments = ["Good choice", "Probably", "Yay"];
-var dislikedComments = ["Whattt?", "Whatever", "Ouch.."];
+var likedComments = ["Good pick!", "OMG!", "Yay!", "Liked!", "<3"];
+var dislikedComments = ["Whattt?", "Seriously?", "Ouch..", "Regret now?"];
 
 $("#tinderslide").jTinder({
 	// dislike callback
