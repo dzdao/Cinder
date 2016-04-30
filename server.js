@@ -28,7 +28,7 @@ var Users = mongo.model("Users", userSchema);
 
 // middleware below...
 //set up static file directory for default routing
-app.use(express.static(__dirname + "/"));
+app.use(express.static(__dirname + "/client"));
 
 // used for parsing content type: application/json
 app.use(bodyParser.urlencoded({ extended : true}));
@@ -206,8 +206,6 @@ app.post("/register", function(req, res) {
             password: req.body.pass1
         });
 
-        console.log(newUser);
-
         // attempt to insert the new user account to mongo
         newUser.save(function(err) {
             if (err) {
@@ -225,7 +223,7 @@ app.post("/register", function(req, res) {
         });
     }
     else {
-        res.send("Error. Make sure passwords match.")
+        res.send("Error. Make sure your passwords match.")
     }
 });
 
