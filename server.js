@@ -73,117 +73,101 @@ app.listen(8000, function() {
 //   console.log('Stormpath Ready');
 // });
 
-function loginUser(userid, pass, callback) {
+// function loginUser(userid, pass, callback) {
+//
+//     // get the Stormpath application
+//     client.getApplication(applicationHref, function(err, application) {
+//         if(err)
+//             throw err;
+//         else {
+//             var authRequest = {
+//                 username: userid,
+//                 password: pass
+//             };
+//
+//             // try to authenticate the account
+//             application.authenticateAccount(authRequest, function(err, result) {
+//                 // Description: If auth is successful, the result will have a method,
+//                 // called getAccount(), for getting account details.
+//                 // Input: Username and password
+//                 // Output: If credentials are correct, a JSON object with account details is returned, otherwise,
+//                 // an error is returned
+//
+//                 if(err) {
+//                     //throw err;
+//                     console.log("loginUser(): Error is: " + err);
+//                     callback(err);
+//                     //callback(user);
+//                 }
+//                 else {
+//                     result.getAccount(function(err, account) {
+//                         console.log("Authentication was sucessful. Account info: ", account);
+//
+//                         callback(account);
+//                     });
+//                 }
+//             });
+//         }
+//     });
+// }
 
-    // get the Stormpath application
-    client.getApplication(applicationHref, function(err, application) {
-        if(err)
-            throw err;
-        else {
-            var authRequest = {
-                username: userid,
-                password: pass
-            };
-
-            // try to authenticate the account
-            application.authenticateAccount(authRequest, function(err, result) {
-                // Description: If auth is successful, the result will have a method,
-                // called getAccount(), for getting account details.
-                // Input: Username and password
-                // Output: If credentials are correct, a JSON object with account details is returned, otherwise,
-                // an error is returned
-
-                if(err) {
-                    //throw err;
-                    console.log("loginUser(): Error is: " + err);
-                    callback(err);
-                    //callback(user);
-                }
-                else {
-                    result.getAccount(function(err, account) {
-                        console.log("Authentication was sucessful. Account info: ", account);
-
-                        callback(account);
-                    });
-                }
-            });
-        }
-    });
-}
-
-function getUserdata() {
-    // get the Stormpath application
-    client.getApplication(applicationHref, function(err, application) {
-        if(err)
-            throw err;
-        else {
-            var authRequest = {
-                username: userid,
-                password: pass
-            };
-
-            // try to authenticate the account
-            application.authenticateAccount(authRequest, function(err, result) {
-                // Description: If auth is successful, the result will have a method,
-                // called getAccount(), for getting account details.
-                // Input: Username and password
-                // Output: If credentials are correct, a JSON object with account details is returned, otherwise,
-                // an error is returned
-
-                if(err) {
-                    //throw err;
-                    console.log("loginUser(): Error is: " + err);
-                    callback(err);
-                    //callback(user);
-                }
-                else {
-                    result.getAccount(function(err, account) {
-                        console.log("Authentication was sucessful. Account info: ", account);
-
-                        var customData = account.customData;
-
-                        //callback(account);
-                        callback(account);
-                    });
-                }
-            });
-        }
-    });
-}
+// function getUserdata() {
+//     // get the Stormpath application
+//     client.getApplication(applicationHref, function(err, application) {
+//         if(err)
+//             throw err;
+//         else {
+//             var authRequest = {
+//                 username: userid,
+//                 password: pass
+//             };
+//
+//             // try to authenticate the account
+//             application.authenticateAccount(authRequest, function(err, result) {
+//                 // Description: If auth is successful, the result will have a method,
+//                 // called getAccount(), for getting account details.
+//                 // Input: Username and password
+//                 // Output: If credentials are correct, a JSON object with account details is returned, otherwise,
+//                 // an error is returned
+//
+//                 if(err) {
+//                     //throw err;
+//                     console.log("loginUser(): Error is: " + err);
+//                     callback(err);
+//                     //callback(user);
+//                 }
+//                 else {
+//                     result.getAccount(function(err, account) {
+//                         console.log("Authentication was sucessful. Account info: ", account);
+//
+//                         var customData = account.customData;
+//
+//                         //callback(account);
+//                         callback(account);
+//                     });
+//                 }
+//             });
+//         }
+//     });
+// }
 
 /* ROUTES are defined below */
 
-// login via stormpath database
-app.post("/login", function(req, res) {
-    console.log("User login1");
 
-    console.log(req.body);
-    var userid = req.body.userid;
-    var pass = req.body.pass;
-
-    console.log(userid + " " + pass);
-
-    loginUser(userid, pass, function(user) {
-            req.session.user = user; // set encrypted cookie with user info
-            console.log("app.post(): user is: " + user);
-            res.json(user);
-
-    });
-});
 
 // login via mongoDB accounts database
-app.post("/login2", function(req, res) {
-    console.log("User login2");
+app.post("/login", function(req, res) {
+    console.log("User login for " + req.body.username);
 
     // search mongoDB for user's email
-    Users.findOne({ email : req.body.email }, function(err, user) {
+    Users.findOne({ username : req.body.username }, function(err, user) {
         if(!user) {
-            res.send("Error. This email is not registered.");
+            res.send("Error. This user is not registered.");
         }
         else {
-            if(user.password === req.body.pass) {
+            if(user.password === req.body.password) {
                 req.session.user = user;
-                res.redirect("/dashboard");
+                res.redirect("/");
             }
             else {
                 res.send("Error. Wrong email or password");
@@ -191,6 +175,24 @@ app.post("/login2", function(req, res) {
         }
     });
 });
+
+// login via stormpath database
+// app.post("/login2", function(req, res) {
+//     console.log("User login2");
+//
+//     console.log(req.body);
+//     var userid = req.body.userid;
+//     var pass = req.body.pass;
+//
+//     console.log(userid + " " + pass);
+//
+//     loginUser(userid, pass, function(user) {
+//             req.session.user = user; // set encrypted cookie with user info
+//             console.log("app.post(): user is: " + user);
+//             res.json(user);
+//
+//     });
+// });
 
 app.post("/register", function(req, res) {
 
@@ -218,7 +220,7 @@ app.post("/register", function(req, res) {
             else {
                 //req.session.user = user; ??
                 console.log("A new user was registered on the system.");
-                res.redirect("/dashboard");
+                res.redirect("/");
             }
         });
     }
@@ -248,7 +250,7 @@ app.post("/updateProfile", function(req, res) {
             }});
     }
     else {
-        res.redirect("/login2");
+        res.redirect("/login");
     }
 });
 
@@ -276,6 +278,7 @@ app.get("/checklogin", function(req, res) {
     }
     else {
         res.status("401").send({ error : "Unauthorized. Please login first" });
+        //res.send("401");
     }
 });
 

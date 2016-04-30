@@ -62,13 +62,15 @@
                     <!-- <li class="page-scroll">
                         <a href="#contact">Contact</a>
                     </li> -->
-                    </li>
-                        <li class="page-scroll">
+                    <li class="page-scroll" id="nav-signup">
                         <a href="#signup">Signup</a>
                     </li>
                     </li>
-                        <li class="page-scroll">
+                    <li class="page-scroll" id="nav-login">
                         <a href="#login">Login</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a id="nav-logout" href="/logout">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -87,7 +89,7 @@
                     <div class="intro-text">
                         <span class="name">Cinder</span>
                         <hr class="star-light">
-                        <span class="skills">Github and Chill - Code - Connect</span>
+                        <span class="skills">Connect - Code - Github and Chill</span>
                     </div>
                 </div>
             </div>
@@ -262,11 +264,11 @@
                 <div class="col-lg-8 col-lg-offset-2">
                     <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                     <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-                    <form name="signup" id="signupForm" novalidate>
+                    <form name="signup" id="signupForm">
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label>Username</label>
-                                <input type="text" class="form-control" placeholder="Username" id="userid" required data-validation-required-message="Please enter your name.">
+                                <input type="text" class="form-control" placeholder="Username" id="signup-userid" required data-validation-required-message="Please enter your name.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
@@ -294,14 +296,14 @@
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label>Password</label>
-                                <input type="password" class="form-control" placeholder="Enter your password" id="pass1" required data-validation-required-message="Please enter a password.">
+                                <input type="password" class="form-control" placeholder="Enter your password" id="signup-pass1" required data-validation-required-message="Please enter a password.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label>Password</label>
-                                <input type="password" class="form-control" placeholder="Re-enter your password" id="pass2" required data-validation-required-message="Please re-enter your password.">
+                                <input type="password" class="form-control" placeholder="Re-enter your password" id="signup-pass2" required data-validation-required-message="Please re-enter your password.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
@@ -310,6 +312,47 @@
                         <div class="row">
                             <div class="form-group col-xs-12">
                                 <button type="submit" class="btn btn-success btn-lg">Signup</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Section -->
+    <section id="login">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Login</h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
+                    <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
+                    <form name="login" id="loginForm">
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Username</label>
+                                <input type="text" class="form-control" placeholder="Username" id="login-userid" required data-validation-required-message="Please enter your username.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Password</label>
+                                <input type="password" class="form-control" placeholder="Enter your password" id="login-pass" required data-validation-required-message="Please enter a password.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <br>
+                        <div id="success"></div>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <button type="submit" class="btn btn-success btn-lg">Login</button>
                             </div>
                         </div>
                     </form>
@@ -611,8 +654,8 @@
     <script src="js/jqBootstrapValidation.js"></script>
     <script src="js/contact_me.js"></script>
 
-    <!-- Signup Account JavaScript -->
-    <script src="js/signup.js"></script>
+    <!-- User Authentication JavaScript -->
+    <script src="js/user_auth.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="js/freelancer.js"></script>
