@@ -12,6 +12,7 @@ var express = require("express"),
 mongo.connect("mongodb://localhost/accounts");
 
 var userSchema = mongo.Schema({
+    username : String,
     first : String,
     last : String,
     email : { type : String, unique : true }, // 1 unique email per account
@@ -194,13 +195,16 @@ app.post("/login2", function(req, res) {
 app.post("/register", function(req, res) {
 
     // check to make sure both password fields match
-    if(req.body.pass === req.body.pass2) {
+    if(req.body.pass1 === req.body.pass2) {
         var newUser = new Users({
-            first : req.body.fName,
-            last : req.body.lName,
+            username : req.body.username,
+            first : req.body.first,
+            last : req.body.last,
             email : req.body.email,
-            password: req.body.pass
+            password: req.body.pass1
         });
+
+        console.log(newUser);
 
         // attempt to insert the new user account to mongo
         newUser.save(function(err) {
@@ -213,6 +217,7 @@ app.post("/register", function(req, res) {
             }
             else {
                 //req.session.user = user; ??
+                console.log("A new user was registered on the system.");
                 res.redirect("/dashboard");
             }
         });
