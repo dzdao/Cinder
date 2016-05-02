@@ -45,6 +45,7 @@ $(function() {
                     username: userid,
                     password: pass
                 },
+                async: false,
                 success: function(data) {
                     console.log("Successful login: " + data);
                     location.reload();
