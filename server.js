@@ -167,9 +167,10 @@ app.post("/login", function(req, res) {
         else {
             if(user.password === req.body.password) {
                 req.session.user = user;
-                res.redirect("/");
+                res.send("200");
             }
             else {
+                console.log("Wrong password");
                 res.send("Error. Wrong email or password");
             }
         }
@@ -218,7 +219,8 @@ app.post("/register", function(req, res) {
             else {
                 //req.session.user = user; ??
                 console.log("A new user was registered on the system.");
-                res.redirect("/");
+                //res.status("200").send("User was registered.");
+                res.send("200");
             }
         });
     }
@@ -228,7 +230,6 @@ app.post("/register", function(req, res) {
 });
 
 app.post("/updateProfile", function(req, res) {
-
     console.log("User is updating profile");
 
     if(req.session && req.session.user.email) {
@@ -255,8 +256,11 @@ app.post("/updateProfile", function(req, res) {
 app.get("/dashboard", function(req, res) {
 
     if(req.session && req.session.user) {
-        res.send(req.session.user);
-        //res.redirect("/dashboard.html");
+        var data = req.session.user;
+        delete data.password;           // remove the user password from object
+
+        //res.send(req.session.user);
+        res.send(data);
     }
     else {
         res.status("401").send({ error : "Unauthorized. Please login first" });
