@@ -19,14 +19,13 @@ $(function() {
             if(err.status === 401) {
                 // user is NOT logged in
                 $("#nav-logout").hide();
+                $("#nav-match").hide();
             }
             else {
                 console.log(err);
             }
         }
     });
-
-
 
     $("#loginForm input").jqBootstrapValidation({
         preventSubmit: true,
@@ -40,6 +39,7 @@ $(function() {
             $.ajax({
                 url: "/login",
                 type: "POST",
+                //contentType: "application/json",
                 dataType: "json",
                 data: {
                     username: userid,
@@ -78,14 +78,18 @@ $(function() {
 
             // get values from signup FORM
             var userid = $("input#signup-userid").val();
-            console.log(userid);
-
             var firstName = $("input#fname").val();
             var lastName = $("input#lname").val();
             var userEmail = $("input#email").val();
-            console.log(userEmail);
             var password1 = $("input#signup-pass1").val();
             var password2 = $("input#signup-pass2").val();
+            var lang = $("select#language").val();
+            console.log(lang);
+
+            var sci = $("select#scientist").val();
+            console.log(sci);
+            var varType = $("select#variable").val();
+            console.log(varType);
 
             // Check for white space in name for Success/Fail message
             if (firstName.indexOf(' ') >= 0) {
@@ -103,7 +107,10 @@ $(function() {
                     last: lastName,
                     email: userEmail,
                     pass1: password1,
-                    pass2: password2
+                    pass2: password2,
+                    language: lang,
+                    scientist: sci,
+                    variable: varType
                 },
                 cache: false,
                 success: function(data) {

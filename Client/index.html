@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Cinder! Where We Github and Chill</title>
+    <title>Cinder - Github and Chill!</title>
 
     <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -18,9 +18,10 @@
     <link href="css/freelancer.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Titillium+Web' rel='stylesheet' type='text/css'>
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <!--<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -44,7 +45,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#page-top">Cinder!</a>
+                <a class="navbar-brand" href="#page-top">Cinder</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -52,6 +53,9 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="hidden">
                         <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll" id="nav-match">
+                        <a href="match.html">Let Us Chill</a>
                     </li>
                     <li class="page-scroll">
                         <a href="#portfolio">Portfolio</a>
@@ -75,7 +79,6 @@
         </div>
         <!-- /.container-fluid -->
     </nav>
-
 
     <!-- Header -->
     <header>
@@ -301,6 +304,30 @@
                                 <input type="password" class="form-control" placeholder="Re-enter your password" id="signup-pass2" required data-validation-required-message="Please re-enter your password.">
                                 <p class="help-block text-danger"></p>
                             </div>
+                        </div>
+                        <div class="survey-questions">
+                            <p>What's your favorite programming language?</p>
+                                <select type="text" id="language" form="signupForm">
+                                    <option value="cplus">c++</option>
+                                    <option value="java">java</option>
+                                    <option value="javascript">javascript</option>
+                                    <option value="python">python</option>
+                                </select>
+                            <p>Who's your favorite computer scientist?</p>
+                                <select id="scientist" form="signupForm">
+                                  <option value="grace">Grace Hopper</option>
+                                  <option value="alan">Alan Turing</option>
+                                  <option value="ada">Ada Lovelace</option>
+                                  <option value="dijkstra">Edgar Dijkstra</option>
+                                </select>
+                            <p>What type of variable best describes your personality?</p>
+                                <select id="variable" form="signupForm">
+                                  <option value="global">Global = open and friendly with everyone!</option>
+                                  <option value="static">Static = level headed and unwavering</option>
+                                  <option value="dynamic">Dynamic = never knowing what's expected until it happens</option>
+                                  <option value="local">Local = keeps to themselves and a big homebody</option>
+                                  <option value="counter">Counter = just taking it one day at a time</option>
+                                </select>
                         </div>
                         <br>
                         <div id="success"></div>
@@ -639,7 +666,7 @@
     <script src="js/bootstrap.min.js"></script>
 
     <!-- Plugin JavaScript -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
     <script src="js/classie.js"></script>
     <script src="js/cbpAnimatedHeader.js"></script>
 

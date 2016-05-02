@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 	"name": "Cinder-app",
 	"version": "1.0.0",
 	"description": "Project 2",
@@ -8,4 +9,23 @@
 		"express": "^3.8.x",
 		"mongoose": "^4.4.x"	
 	}
+=======
+  "name": "project2",
+  "version": "1.0.0",
+  "description": "\"Project 2 sample code\"",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^3.21.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bisaysavath/Cinder.git"
+  },
+  "author": "B.S.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bisaysavath/Cinder/issues"
+  },
+  "homepage": "https://github.com/bisaysavath/Cinder#readme"
+>>>>>>> upstream/master
 }
