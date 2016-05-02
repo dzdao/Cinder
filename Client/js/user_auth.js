@@ -84,12 +84,8 @@ $(function() {
             var password1 = $("input#signup-pass1").val();
             var password2 = $("input#signup-pass2").val();
             var lang = $("select#language").val();
-            console.log(lang);
-
             var sci = $("select#scientist").val();
-            console.log(sci);
             var varType = $("select#variable").val();
-            console.log(varType);
 
             // Check for white space in name for Success/Fail message
             if (firstName.indexOf(' ') >= 0) {
