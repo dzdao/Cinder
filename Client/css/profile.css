@@ -14,6 +14,12 @@ http://bootsnipp.com/snippets/25zz and http://www.bootply.com/qof7bxKmBp
     color: #333;
 }
 
+.tile, .chat-button, .modal-body, .modal-footer, .modal-exit-button{
+  text-align: center;
+}
+
+
+
 .main .col-md-6 {
     display: -webkit-flex;
     display: -ms-flexbox;

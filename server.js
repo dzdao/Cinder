@@ -6,45 +6,33 @@ var express = require("express"),
     users = [
 		{
 			"username": "jasondoe",
-			"name": "Jason Doe",
-			"lang": ["c++", "java"],
-			"ide": ["bracket", "vi"],
-			"hobby": ["video games, movies"]
+			"first": "Jason",
+			"last": "Doe",
+			"email": "jason@doe.com",
+			"password": "jason",
+			"lang": "C++",
+			"scientist": "Grace Hopper",
+			"variable": "global = open and friendly with everyone"
 		},
 		{
-			"username": "janekim",
-			"name": "Jane Kim",
-			"lang": ["java", "python"],
-			"ide": ["bracket", "visual studio code", "atom"],
-			"hobby": ["video games, musics"]
+			"username": "jane",
+			"first": "Jane",
+			"last": "Vi",
+			"email": "jane@vi.com",
+			"password": "jane",
+			"lang": "C++",
+			"scientist": "Darwin",
+			"variable": "global = open and friendly with everyone"
 		},
-		{
-			"username": "nathanwankhade",
-			"name": "Nathan Wankhade",
-			"lang": ["c++", "python"],
-			"ide": ["vi", "code", "xcode"],
-			"hobby": ["movies, musics"]
-		},
-		{
-			"username": "nathanwankhade",
-			"name": "Nathan Wankhade",
-			"lang": ["c++", "python"],
-			"ide": ["vi", "code", "xcode"],
-			"hobby": ["movies, musics"]
-		},
-		{
-			"username": "nathanwankhade",
-			"name": "Nathan Wankhade",
-			"lang": ["c++", "python"],
-			"ide": ["vi", "code", "xcode"],
-			"hobby": ["movies, musics"]
-		},
-		{
-			"username": "nathanwankhade",
-			"name": "Nathan Wankhade",
-			"lang": ["c++", "python"],
-			"ide": ["vi", "code", "xcode"],
-			"hobby": ["movies, musics"]
+				{
+			"username": "holly",
+			"first": "holly",
+			"last": "ho",
+			"email": "holly@ho.com",
+			"password": "holly",
+			"lang": "Javascript",
+			"scientist": "Darwin",
+			"variable": "global = open and friendly with everyone"
 		}
 	]
     //port = process.env.PORT || 3000;

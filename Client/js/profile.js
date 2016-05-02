@@ -1,215 +1,120 @@
-// Credit: http://bootsnipp.com/snippets/W06v1
-
 var main = function () {
+
     $.get("/db.json", function (users) {
 
         console.log(users);
         users.forEach(function (user) {
-            // Article
-            var $article = $("<article>").attr("class", "white-panel");
-            console.log(user);
-
-            // Name
-            var $name = $("<h4>").append(user.name);
-
-            // Languages
-            var languages = ""
-            // Processing language array
-            user.lang.forEach(function(lang){
-                languages += " " + lang;
-            });
-            var $lang = $("<p>").text("Programming languages: " + languages);
-
-            // IDE
-            var ides = "";
-            user.ide.forEach(function (ide) {
-                ides += " " + ide;
-            });
             
-            var $ide = $("<p>").text("Favorite IDEs: " + ides);
+            // Generating HTML Template for Tile
+            var $col = $("<div>").addClass("col-md-3");
+            var $span = $("<div>").addClass("span3 well");
+            var $tile = $("<div>").addClass("tile");
             
-            // Hobbies
-            var hobbies = "";
-            user.hobby.forEach(function(hobby){
-                hobbies += " " + hobby;
+            var $a = $("<a>").attr({
+                "href": "#aboutModal", 
+                "data-toggle": "modal",
+                "data-target": "#" + user.username
+            });
+            var $img = $("<img>").attr({
+                "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R",
+                "width": "140",
+                "height": "140",
+                "class": "img-circle"
+            });
+            $a.append($img);
+            
+            var $h3 = $("<h3>").text(user.username);
+            
+            var $chat_button = $("<div>").addClass("chat-button");
+            var $button = $("<button>").attr({
+                "type": "button",
+                "class": "btn btn-default",
+                "data-dismiss": "modal"
             })
-            var $hobbies = $("<p>").text("Hobbies: " +  hobbies);
+            $button.text("Chat with me!");
+            $chat_button.append($button);
             
             
-            $article.append($name, $lang, $("<br>"), $ide, $("<br>"), $hobbies);
+            $tile.append($a, $h3, $button);
+            $span.append($tile);
+            $col.append($span);
+            
+            // End of generating HTML Template for Tile
+            
+            // Generating Template for Modal
+            var $modal_fade = $("<div>").attr({
+                "class": "modal fade",
+                "id": user.username,
+                "tabIndex": "-1",
+                "role": "dialog",
+                "aria-labelledby": "myModalLabel",
+                "aria-hidden": "true"
+            });
+            var $modal_dialog = $("<div>").addClass("modal-dialog");
+            
+            // modal-content
+            var $modal_content = $("<div>").addClass("modal-content");
+            
+            // modal-header
+            var $modal_header = $("<div>").addClass("modal-header");
+            $button = $("<button>").attr({
+                "type": "button",
+                "class": "close",
+                "data-dismiss": "modal",
+                "aria-hidden": "true"
+            })
+            var $h4 = $("<h4>").attr({
+                "class": "modal-title",
+                "id": "myModalLabel"
+            })
+            $h4.text(user.first + " " + user.last)
+            $modal_header.append($button, $h4);
+            
+            
+            // modal-body
+            $modal_body = $("<div>").addClass("modal-body");
+            $img = $("<img>").attr({
+                "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R",
+                "width": "140",
+                "height": "140",
+                "class": "img-circle"
+            });
+            $h3 = $("<h3>").addClass("media-headerin").text(user.first);
+            $span = $("<span>").text("Languages ");
+            $language = $("<span>").addClass("label label-warning").text(user.lang);
+            $p = $("<p>").addClass("text-left");
+            $p.text(user.variable + " " + user.scientist);
+            $strong = $("<strong>").text("Bio: ").append("<br>");
+            $p.prepend($strong)
+            $modal_body.append($img, $h3, $span, $language, $("<hr>"), $p);
+            
+            
+            // // modal-footer
+            $modal_footer = $("<div>").addClass("modal-footer");
+            $modal_exit_button = $("<div>").addClass("modal-exit-button");
+            $button = $("<button>").attr({
+                "type": "button",
+                "class": "btn btn-default",
+                "data-dismiss": "modal",
+                "aria-hidden": "true"
+            })
+            $button.text("I've heard enough about " + user.first);
+            $modal_footer.append($modal_exit_button.append($button));
+            
+            $modal_content.append($modal_header, $modal_body, $modal_footer);
+            $modal_dialog.append($modal_content);
+            $modal_fade.append($modal_dialog);
+            
+            // End generating modal
+            
+            // Append Tile and Modal
+            $("#userTiles").append($col ,$modal_fade);
 
-            
-            $("#pinBoot").append($article);
         });
     });
 };
 
 $(document).ready(function() {
     main();
-$('#pinBoot').pinterest_grid({
-no_columns: 4,
-padding_x: 10,
-padding_y: 10,
-margin_bottom: 50,
-single_column_breakpoint: 700
-});
 });
 
-/*
-Ref:
-Thanks to:
-http://www.jqueryscript.net/layout/Simple-jQuery-Plugin-To-Create-Pinterest-Style-Grid-Layout-Pinterest-Grid.html
-*/
-
-
-/*
-Pinterest Grid Plugin
-Copyright 2014 Mediademons
-@author smm 16/04/2014
-usage:
- $(document).ready(function() {
-    $('#blog-landing').pinterest_grid({
-        no_columns: 4
-    });
-});
-*/
-;(function ($, window, document, undefined) {
-var pluginName = 'pinterest_grid',
-    defaults = {
-        padding_x: 10,
-        padding_y: 10,
-        no_columns: 4,
-        margin_bottom: 50,
-        single_column_breakpoint: 700
-    },
-    columns,
-    $article,
-    article_width;
-
-function Plugin(element, options) {
-    this.element = element;
-    this.options = $.extend({}, defaults, options) ;
-    this._defaults = defaults;
-    this._name = pluginName;
-    this.init();
-}
-
-Plugin.prototype.init = function () {
-    var self = this,
-        resize_finish;
-
-    $(window).resize(function() {
-        clearTimeout(resize_finish);
-        resize_finish = setTimeout( function () {
-            self.make_layout_change(self);
-        }, 11);
-    });
-
-    self.make_layout_change(self);
-
-    setTimeout(function() {
-        $(window).resize();
-    }, 500);
-};
-
-Plugin.prototype.calculate = function (single_column_mode) {
-    var self = this,
-        tallest = 0,
-        row = 0,
-        $container = $(this.element),
-        container_width = $container.width();
-        $article = $(this.element).children();
-
-    if(single_column_mode === true) {
-        article_width = $container.width() - self.options.padding_x;
-    } else {
-        article_width = ($container.width() - self.options.padding_x * self.options.no_columns) / self.options.no_columns;
-    }
-
-    $article.each(function() {
-        $(this).css('width', article_width);
-    });
-
-    columns = self.options.no_columns;
-
-    $article.each(function(index) {
-        var current_column,
-            left_out = 0,
-            top = 0,
-            $this = $(this),
-            prevAll = $this.prevAll(),
-            tallest = 0;
-
-        if(single_column_mode === false) {
-            current_column = (index % columns);
-        } else {
-            current_column = 0;
-        }
-
-        for(var t = 0; t < columns; t++) {
-            $this.removeClass('c'+t);
-        }
-
-        if(index % columns === 0) {
-            row++;
-        }
-
-        $this.addClass('c' + current_column);
-        $this.addClass('r' + row);
-
-        prevAll.each(function(index) {
-            if($(this).hasClass('c' + current_column)) {
-                top += $(this).outerHeight() + self.options.padding_y;
-            }
-        });
-
-        if(single_column_mode === true) {
-            left_out = 0;
-        } else {
-            left_out = (index % columns) * (article_width + self.options.padding_x);
-        }
-
-        $this.css({
-            'left': left_out,
-            'top' : top
-        });
-    });
-
-    this.tallest($container);
-    $(window).resize();
-};
-
-Plugin.prototype.tallest = function (_container) {
-    var column_heights = [],
-        largest = 0;
-
-    for(var z = 0; z < columns; z++) {
-        var temp_height = 0;
-        _container.find('.c'+z).each(function() {
-            temp_height += $(this).outerHeight();
-        });
-        column_heights[z] = temp_height;
-    }
-
-    largest = Math.max.apply(Math, column_heights);
-    _container.css('height', largest + (this.options.padding_y + this.options.margin_bottom));
-};
-
-Plugin.prototype.make_layout_change = function (_self) {
-    if($(window).width() < _self.options.single_column_breakpoint) {
-        _self.calculate(true);
-    } else {
-        _self.calculate(false);
-    }
-};
-
-$.fn[pluginName] = function (options) {
-    return this.each(function () {
-        if (!$.data(this, 'plugin_' + pluginName)) {
-            $.data(this, 'plugin_' + pluginName,
-            new Plugin(this, options));
-        }
-    });
-}
-
-})(jQuery, window, document);
