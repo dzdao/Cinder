@@ -20,20 +20,12 @@
     <!-- Custom Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Titillium+Web' rel='stylesheet' type='text/css'>
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    
+
     <!--Profile CSS-->
     <link rel="stylesheet" type="text/css" href="css/profile.css">
-    
-    <!--<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">-->
+
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
+    
 </head>
 
 <body id="page-top" class="index">
@@ -59,7 +51,7 @@
                         <a href="#page-top"></a>
                     </li>
                     <li class="page-scroll">
-                        <a href="#">Let Us Chill</a>
+                        <a href="match.html">Let Us Chill</a>
                     </li>
                     <li class="page-scroll">
                         <a href="index.html">Portfolio</a>
@@ -79,21 +71,161 @@
 
     <header>
         <div class="container">
-            <h1 style="display: block;">Hacker Buddies</h1>
-            <hr>
-            <!-- start padding container -->
-            <div class="wrap">
-                
-                <section id="pinBoot">
-                    <!--profile.js will populate profile cards here-->
-          
-                </section>
-
-
-
+        <h1 style="display: block;">Hacker Buddies</h1>
+        <hr>
+        <div class="row main">
+            <!-- profile.js will generate profile tiles and modals -->
+            <!-- START TILE -->
+            <div class="col-md-3">
+                <div class="span3 well">
+                    <center>
+                        <!-- data-target binds the tile to the modal that will pop-up when the tile is clicked -->
+                        <a href="#aboutModal" data-toggle="modal" data-target="#myModal1"><img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R"
+                                name="aboutme" width="140" height="140" class="img-circle"></a>
+                        <h3>Joe Sixpack</h3>
+                        <em>click my face for more</em>
+                    </center>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                <h4 class="modal-title" id="myModalLabel">Holly</h4>
+                            </div>
+                            <div class="modal-body">
+                                <center>
+                                    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R" name="aboutme"
+                                        width="140" height="140" border="0" class="img-circle"></a>
+                                    <h3 class="media-heading"> Holly <small>USA</small></h3>
+                                    <span><strong>Skills: </strong></span>
+                                    <span class="label label-warning">JAVASCRIPT</span>
+                                    <span class="label label-info">Adobe CS 5.5</span>
+                                    <span class="label label-info">Microsoft Office</span>
+                                    <span class="label label-success">Windows XP, Vista, 7</span>
+                                </center>
+                                <hr>
+                                <center>
+                                    <p class="text-left"><strong>Bio: </strong><br> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sem dui, tempor
+                                        sit amet commodo a, vulputate vel tellus.</p>
+                                    <br>
+                                </center>
+                            </div>
+                            <div class="modal-footer">
+                                <center>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">I've heard enough about Joe</button>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END MODAL -->
             </div>
-            <!-- end padding container -->
+            <!-- END TILE -->
+
+            <!-- START TILE -->
+            <div class="col-md-3">
+                <div class="span3 well">
+                    <center>
+                        <!-- data-target binds the tile to the modal that will pop-up when the tile is clicked -->
+                        <a href="#aboutModal" data-toggle="modal" data-target="#myModal1"><img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R"
+                                name="aboutme" width="140" height="140" class="img-circle"></a>
+                        <h3>Joe Sixpack</h3>
+                        <em>click my face for more</em>
+                    </center>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                <h4 class="modal-title" id="myModalLabel">Holly</h4>
+                            </div>
+                            <div class="modal-body">
+                                <center>
+                                    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R" name="aboutme"
+                                        width="140" height="140" border="0" class="img-circle"></a>
+                                    <h3 class="media-heading"> Holly <small>USA</small></h3>
+                                    <span><strong>Skills: </strong></span>
+                                    <span class="label label-warning">JAVASCRIPT</span>
+                                    <span class="label label-info">Adobe CS 5.5</span>
+                                    <span class="label label-info">Microsoft Office</span>
+                                    <span class="label label-success">Windows XP, Vista, 7</span>
+                                </center>
+                                <hr>
+                                <center>
+                                    <p class="text-left"><strong>Bio: </strong><br> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sem dui, tempor
+                                        sit amet commodo a, vulputate vel tellus.</p>
+                                    <br>
+                                </center>
+                            </div>
+                            <div class="modal-footer">
+                                <center>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">I've heard enough about Joe</button>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END MODAL -->
+            </div>
+            <!-- END TILE -->
+
+
+            <!-- START TILE -->
+            <div class="col-md-3">
+                <div class="span3 well">
+                    <center>
+                        <!-- data-target binds the tile to the modal that will pop-up when the tile is clicked -->
+                        <a href="#aboutModal" data-toggle="modal" data-target="#myModal1"><img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R"
+                                name="aboutme" width="140" height="140" class="img-circle"></a>
+                        <h3>Joe Sixpack</h3>
+                        <em>click my face for more</em>
+                    </center>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                <h4 class="modal-title" id="myModalLabel">Holly</h4>
+                            </div>
+                            <div class="modal-body">
+                                <center>
+                                    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R" name="aboutme"
+                                        width="140" height="140" border="0" class="img-circle"></a>
+                                    <h3 class="media-heading"> Holly <small>USA</small></h3>
+                                    <span><strong>Skills: </strong></span>
+                                    <span class="label label-warning">JAVASCRIPT</span>
+                                    <span class="label label-info">Adobe CS 5.5</span>
+                                    <span class="label label-info">Microsoft Office</span>
+                                    <span class="label label-success">Windows XP, Vista, 7</span>
+                                </center>
+                                <hr>
+                                <center>
+                                    <p class="text-left"><strong>Bio: </strong><br> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sem dui, tempor
+                                        sit amet commodo a, vulputate vel tellus.</p>
+                                    <br>
+                                </center>
+                            </div>
+                            <div class="modal-footer">
+                                <center>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">I've heard enough about Joe</button>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END MODAL -->
+            </div>
+            <!-- END TILE -->
+            
         </div>
+        </div>
+      
     </header>
 
     <!-- Footer -->
@@ -174,6 +306,7 @@
     <!-- transform2d lib -->
     <script type="text/javascript" src="js/jquery.transform2d.js"></script>
     
+    <!-- profile.js -->
     <script type="text/javascript" src="js/profile.js"></script>
 
 </body>
