@@ -34,6 +34,17 @@ var express = require("express"),
 			"scientist": "Darwin",
 			"variable": "global = open and friendly with everyone"
 		}
+		,
+				{
+			"username": "test",
+			"first": "holly",
+			"last": "ho",
+			"email": "holly@ho.com",
+			"password": "holly",
+			"lang": "Javascript",
+			"scientist": "Darwin",
+			"variable": "global = open and friendly with everyone"
+		}
 	]
     //port = process.env.PORT || 3000;
 

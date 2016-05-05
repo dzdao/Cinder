@@ -1,9 +1,15 @@
 var main = function () {
 
     $.get("/db.json", function (users) {
-
+        var getUser = [];
+        
+        // If users didn't look for particular hashtag, then display 8 random profiles
+        if (_.isEmpty(getUser)) {
+            getUser = _.sample(users, 4);
+        }
+        
         console.log(users);
-        users.forEach(function (user) {
+        getUser.forEach(function (user) {
             
             // Generating HTML Template for Tile
             var $col = $("<div>").addClass("col-md-3");
