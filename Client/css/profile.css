@@ -1,0 +1,32 @@
+/*
+Ref:
+Thanks to:
+http://bootsnipp.com/snippets/25zz and http://www.bootply.com/qof7bxKmBp
+*/
+
+.row.main {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    color: #333;
+}
+
+.tile, .chat-button, .modal-body, .modal-footer, .modal-exit-button{
+  text-align: center;
+}
+
+
+
+.main .col-md-6 {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    width: 49%;
+}
+
+.panel {
+    width: 100%;
+}

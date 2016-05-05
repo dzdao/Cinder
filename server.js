@@ -7,6 +7,7 @@ var express = require("express"),
     app = express(),
     port = process.env.PORT || 3000;
 
+
 // Start listening at port 3000
 app.listen(port, function() {
     console.log("Server is listening at port " + port);
@@ -37,6 +38,10 @@ var Users = mongo.model("Users", userSchema);
 // Set static route to html files.
 app.use(express.static(__dirname + "/Client"));
 
+app.get("/db.json", function(req, res){
+    console.log("Server working");
+    res.send(users);
+});
 // used for parsing content type: application/json
 app.use(bodyParser.urlencoded({
     extended: true
