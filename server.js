@@ -5,7 +5,11 @@ var express = require("express"),
     mongo = require("mongoose"),
     sessions = require("client-sessions"),
     app = express(),
-    port = process.env.PORT || 3000;
+    port = process.env.PORT || 3000,
+    mongoURL = process.env.MONGODB_URI || "mongodb://localhost/accounts";
+    
+var fs = require("fs"),
+    db;
 
 
 // Start listening at port 3000
@@ -14,7 +18,7 @@ app.listen(port, function() {
 });
 
 // connect to mongoDB
-mongo.connect("mongodb://localhost/accounts");
+mongo.connect(mongoURL);
 
 var userSchema = mongo.Schema({
     username: String,
@@ -40,7 +44,11 @@ app.use(express.static(__dirname + "/Client"));
 
 app.get("/db.json", function(req, res){
     console.log("Server working");
-    res.send(users);
+    fs.readFile("db.json", "utf8", function (err, data) {
+        db = JSON.parse(data);
+    });
+
+    res.send(db.users);
 });
 // used for parsing content type: application/json
 app.use(bodyParser.urlencoded({

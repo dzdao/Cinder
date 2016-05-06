@@ -16,13 +16,14 @@
 
     <!-- Custom CSS -->
     <link href="css/freelancer.css" rel="stylesheet">
+    <link href="css/profile.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Titillium+Web' rel='stylesheet' type='text/css'>
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     
     <!--jTinder CSS-->
-    <link rel="stylesheet" type="text/css" href="css/jTinder.css">
+    <link rel="stylesheet" type="text/css" href="css/match.css">
     
     <!--<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">-->
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
@@ -61,14 +62,24 @@
                     <li class="page-scroll">
                         <a href="match.html">Let Us Chill</a>
                     </li>
+                    <!--<li class="page-scroll">
+                        <a href="#portfolio">Portfolio</a>
+                    </li>-->
                     <li class="page-scroll">
                         <a href="profile.html">Profile</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="index.html">About</a>
+                        <a href="#about">About</a>
+                    </li>
+                    <li class="page-scroll" id="nav-signup">
+                        <a href="#signup">Signup</a>
+                    </li>
+                    </li>
+                    <li class="page-scroll" id="nav-login">
+                        <a href="#login">Login</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="index.html">Contact</a>
+                        <a id="nav-logout" href="/logout">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -79,78 +90,75 @@
 
     <header>
         <div class="container">
+        <h1 style="display: block;">Your Matches</h1>
+        <hr>
                 <!-- start padding container -->
-    <div class="wrap">
-        <!-- start jtinder container -->
-        <div id="tinderslide">
-            <ul>
-                <li class="pane1" style="background: url('../img/portfolio/beard guy.png') no-repeat scroll center center">
-                    <div class="img"></div>
-                    <div>Patrick Cooks</div>
-                    <div class="like"></div>
-                    <div class="dislike"></div>
-                </li>
-                <li class="pane2" style="background: url('../img/portfolio/dressed lady.png') no-repeat scroll center center">
-                    <div class="img"></div>
-                    <div>Lisa Champs</div>
-                    <div class="like"></div>
-                    <div class="dislike"></div>
-                </li>
-                <li class="pane3" style="background: url('../img/portfolio/formal guy.png') no-repeat scroll center center">
-                    <div class="img"></div>
-                    <div>Edward Leo</div>
-                    <div class="like"></div>
-                    <div class="dislike"></div>
-                </li>
-                <li class="pane4" style="background: url('../img/portfolio/tank top lady.png') no-repeat scroll center center">
-                    <div class="img"></div>
-                    <div>Christina Jacksons</div>
-                    <div class="like"></div>
-                    <div class="dislike"></div>
-                </li>
-                <li class="pane5" style="background: url('../img/portfolio/suited up guy.png') no-repeat scroll center center">
-                    <div class="img"></div>
-                    <div>Steven Jones</div>
-                    <div class="like"></div>
-                    <div class="dislike"></div>
-                </li>
-                <li class="pane6" style="background: url('../img/portfolio/casual lady.png') no-repeat scroll center center">
-                    <div class="img"></div>
-                    <div>Annie Ross</div>
-                    <div class="like"></div>
-                    <div class="dislike"></div>
-                </li>
-                <li class="pane7" style="background: url('../img/portfolio/formal girl.png') no-repeat scroll center center">
-                    <div class="img"></div>
-                    <div>Elizabeth Haywards</div>
-                    <div class="like"></div>
-                    <div class="dislike"></div>
-                </li>
-                <li class="pane8" style="background: url('../img/portfolio/formal lady.png') no-repeat scroll center center">
-                    <div class="img"></div>
-                    <div>Jennifer McCain</div>
-                    <div class="like"></div>
-                    <div class="dislike"></div>
-                </li>
-                <li class="pane9" style="background: url('../img/portfolio/party guy.png') no-repeat scroll center center">
-                    <div class="img"></div>
-                    <div>James Maw</div>
-                    <div class="like"></div>
-                    <div class="dislike"></div>
-                </li>
-                    <li class="pane10" style="background: url('../img/portfolio/formal lady.png') no-repeat scroll center center">
-                    <div class="img"></div>
-                    <div>Carly Sue</div>
-                    <div class="like"></div>
-                    <div class="dislike"></div>
-                </li>
-            </ul>
-        </div>
-        <!-- end jtinder container -->
-        
+        <div class="wrap">
+            <!-- start jtinder container -->
+            <div id="tinderslide">
+                <ul>
+                    <li class="pane" style="background: url('../img/portfolio/dressed lady.png') no-repeat scroll center center">
+                        <div class="img"></div>
+                        <div>Lisa Champs</div>
+                        <div class="like"></div>
+                        <div class="dislike"></div>
+                    </li>
+
+                    <li class="pane3" style="background: url('../img/portfolio/formal guy.png') no-repeat scroll center center">
+                        <div class="img"></div>
+                        <div>Edward Leo</div>
+                        <div class="like"></div>
+                        <div class="dislike"></div>
+                    </li>
+                    <li class="pane4" style="background: url('../img/portfolio/tank top lady.png') no-repeat scroll center center">
+                        <div class="img"></div>
+                        <div>Christina Jacksons</div>
+                        <div class="like"></div>
+                        <div class="dislike"></div>
+                    </li>
+                    <li class="pane5" style="background: url('../img/portfolio/suited up guy.png') no-repeat scroll center center">
+                        <div class="img"></div>
+                        <div>Steven Jones</div>
+                        <div class="like"></div>
+                        <div class="dislike"></div>
+                    </li>
+                    <li class="pane6" style="background: url('../img/portfolio/casual lady.png') no-repeat scroll center center">
+                        <div class="img"></div>
+                        <div>Annie Ross</div>
+                        <div class="like"></div>
+                        <div class="dislike"></div>
+                    </li>
+                    <li class="pane7" style="background: url('../img/portfolio/formal girl.png') no-repeat scroll center center">
+                        <div class="img"></div>
+                        <div>Elizabeth Haywards</div>
+                        <div class="like"></div>
+                        <div class="dislike"></div>
+                    </li>
+                    <li class="pane8" style="background: url('../img/portfolio/formal lady.png') no-repeat scroll center center">
+                        <div class="img"></div>
+                        <div>Jennifer McCain</div>
+                        <div class="like"></div>
+                        <div class="dislike"></div>
+                    </li>
+                    <li class="pane9" style="background: url('../img/portfolio/party guy.png') no-repeat scroll center center">
+                        <div class="img"></div>
+                        <div>James Maw</div>
+                        <div class="like"></div>
+                        <div class="dislike"></div>
+                    </li>
+                        <li class="pane10" style="background: url('../img/portfolio/formal lady.png') no-repeat scroll center center">
+                        <div class="img"></div>
+                        <div>Carly Sue</div>
+                        <div class="like"></div>
+                        <div class="dislike"></div>
+                    </li>
+                </ul>
+            </div>
+            <!-- end jtinder container -->
+
             <!-- jTinder status text  -->
-        <div id="status"></div>
-    </div>
+            <div id="status"></div>
+        </div>
     <!-- end padding container -->
         </div>
     </header>
@@ -235,7 +243,7 @@
     <!-- jTinder lib -->
     <script type="text/javascript" src="js/jquery.jTinder.js"></script>
     <!-- jTinder initialization script -->
-    <script type="text/javascript" src="js/jTinder.js"></script>
+    <script type="text/javascript" src="js/match.js"></script>
 
 </body>
 
