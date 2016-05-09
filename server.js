@@ -7,7 +7,7 @@ var express = require("express"),
     app = express(),
     port = process.env.PORT || 3000,
     mongoURL = process.env.MONGODB_URI || "mongodb://localhost/accounts";
-    
+
 var fs = require("fs"),
     db;
 
@@ -42,14 +42,6 @@ var Users = mongo.model("Users", userSchema);
 // Set static route to html files.
 app.use(express.static(__dirname + "/Client"));
 
-app.get("/db.json", function(req, res){
-    console.log("Server working");
-    fs.readFile("db.json", "utf8", function (err, data) {
-        db = JSON.parse(data);
-    });
-
-    res.send(db.users);
-});
 // used for parsing content type: application/json
 app.use(bodyParser.urlencoded({
     extended: true
@@ -80,10 +72,18 @@ app.use(sessions({
 
 
 /* ROUTES are defined below */
+app.get("/db.json", function(req, res){
+    console.log("Server working");
+    fs.readFile("db.json", "utf8", function (err, data) {
+        db = JSON.parse(data);
+    });
+
+    res.send(db.users);
+});
 
 app.get("/checklogin", function(req, res) {
     if (req.session && req.session.user) {
-        res.send(req.session.user.email);
+        res.send(req.session.user.username);
     } else {
         res.status("401").send({
             error: "Unauthorized. Please login first"
