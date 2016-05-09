@@ -20,6 +20,7 @@ $(function() {
                 // user is NOT logged in
                 $("#nav-logout").hide();
                 $("#nav-match").hide();
+                $("#nav-profile").hide();
             }
             else {
                 console.log(err);
