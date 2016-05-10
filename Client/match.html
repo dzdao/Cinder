@@ -92,7 +92,7 @@
                         <a href="/logout">Logout</a>
                     </li>
                     <li id="nav-settings">
-                        <a href="/settings"><i class="fa fa-user fa-2x"></i>&nbsp;<span id="nav-userid"></span></a>
+                        <a href="/settings"><i class="fa fa-user fa-1x"></i>&nbsp;<span id="nav-userid"></span></a>
                     </li>
                 </ul>
             </div>
@@ -107,8 +107,15 @@
         <hr>
                 <!-- start padding container -->
         <div class="wrap">
+            <span>
+                <i class="fa fa-refresh fa-spin fa-3x fa-fw margin-bottom"></i>
+                <br>
+                <br>
+                <br>
+                <p>Matching...</p>
+            </span>
             <!-- start jtinder container -->
-            <div id="tinderslide">
+            <div class="hidden" id="tinderslide">
                 <ul data-bind="foreach: users">
                     
                     <li class="pane">
