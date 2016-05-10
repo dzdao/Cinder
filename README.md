@@ -15,3 +15,4 @@
 - [Mongoose.js](http://mongoosejs.com/docs/guide.html)
 - [Mozilla's client-sessions](https://github.com/mozilla/node-client-sessions)
 - [Body-parser](https://www.npmjs.com/package/body-parser-json)
+- [socket.io](https://github.com/socketio/socket.io)

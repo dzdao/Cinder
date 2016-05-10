@@ -301,3 +301,30 @@ app.get("/customData", loginRequired, function(req, res) {
         }
     });
 });
+
+// Routing for a match page
+app.get("/matchUsers", function(req, res) {
+    if (req.session && req.session.user) {
+        // Find users who has at least one same atrribute
+        Users.find( {
+            $and : [
+                { _id: { $ne: req.session.user._id } },
+                { $or:
+                    [
+                        { language: req.session.user.language },
+                        { scientist: req.session.user.scientist },
+                        { variable: req.session.user.variable }
+                    ]
+                }
+            ]
+        }, function(err, user) {
+            if (err) {
+                res.send("error");
+            } else {
+                res.json(user);
+            }
+        });
+    } else {
+        res.status("401").send("Unauthorized. Please login first");
+    }
+});
