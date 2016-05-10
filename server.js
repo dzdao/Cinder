@@ -8,10 +8,6 @@ var express = require("express"),
     port = process.env.PORT || 3000,
     mongoURL = process.env.MONGODB_URI || "mongodb://localhost/accounts";
 
-var fs = require("fs"),
-    db;
-
-
 // Start listening at port 3000
 app.listen(port, function() {
     console.log("Server is listening at port " + port);
@@ -95,14 +91,6 @@ function loginRequired(req, res, next) {
 }
 
 /* ROUTES are defined below */
-app.get("/db.json", function(req, res){
-    console.log("Server working");
-    fs.readFile("db.json", "utf8", function (err, data) {
-        db = JSON.parse(data);
-    });
-
-    res.send(db.users);
-});
 
 // return an array of hacker buddies from user's profile to populate their homepage
 // ************************ Still working on this ****************
@@ -117,6 +105,20 @@ app.get("/buddies", loginRequired, function(req, res) {
                 });
             }
     });
+});
+
+app.delete("/buddies", loginRequired, function(req, res) {
+    Users.update({ username: req.session.user.username },
+        { $pull: { hackerBuddies: req.body.buddy } },
+        function(err, user) {
+            if (err) {
+                res.send("error: cannot remove " + req.body.buddy);
+            } else {
+                console.log("User removed " + req.body.buddy);
+                res.json( { status: "Successfully reomoved " + req.body.buddy } );
+            }
+        }
+    );
 });
 
 app.get("/checklogin", function(req, res) {
