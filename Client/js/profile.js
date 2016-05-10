@@ -9,8 +9,16 @@ var main = function () {
             getUser = _.sample(users, 4);
         }
         
+        if(_.isEmpty(users)) {
+            var $icon = $("<i>").attr( { class: "fa fa-heart-o fa-5x fa-fw margin-bottom", "aria-hidden":"true" } );
+            var $h3 = $("<h3>").text("You have none. Please try Let Us Chill.");
+
+            var $span = $("<span>").addClass("no_buddies_span").append($icon, $("<br>"), $("<br>"), $("<br>"), $h3).hide();
+            $("#userTiles").append($span.fadeIn(1000));
+        }
+        
+        // console.log(users);
         getUser.forEach(function (user) {
-            
             // Generating HTML Template for Tile
             var $col = $("<div>").addClass("col-md-3");
             var $span = $("<div>").addClass("span3 well");
@@ -108,7 +116,31 @@ var main = function () {
                 "aria-hidden": "true"
             })
             $button.text("I've heard enough about " + user.first);
-            $modal_footer.append($modal_exit_button.append($button));
+            
+            $unbuddyButton = $("<button>").attr({
+                "type": "button",
+                "class": "btn btn-danger",
+                "data-dismiss": "modal",
+                "aria-hidden": "true"
+            }).on("click", function () {
+                $.ajax({
+                    url: "/buddies",
+                    type: "DELETE", 
+                    dataType: "json",
+                    data: { buddy: user.username },
+                    success: function (res) {
+                        console.log(res.status);
+                        location.reload();
+                    },
+                    error: function (res) {
+                        console.log(res.responseText);
+                    }
+                });
+            });
+            
+            $unbuddyButton.text("Unbuddy " + user.first);
+            
+            $modal_footer.append($modal_exit_button.append($button, $unbuddyButton));
             
             $modal_content.append($modal_header, $modal_body, $modal_footer);
             $modal_dialog.append($modal_content);
