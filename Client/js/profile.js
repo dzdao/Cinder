@@ -2,8 +2,6 @@ var main = function () {
 
     $.get("/buddies", function (users) {
         
-        console.log(users);
-        
         var getUser = [];
         
         // If users didn't look for particular hashtag, then display 8 random profiles
