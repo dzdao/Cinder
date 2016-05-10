@@ -1,6 +1,7 @@
 var main = function () {
 
-    $.get("/db.json", function (users) {
+    $.get("/buddies", function (users) {
+        
         var getUser = [];
         
         // If users didn't look for particular hashtag, then display 8 random profiles
@@ -8,7 +9,6 @@ var main = function () {
             getUser = _.sample(users, 4);
         }
         
-        console.log(users);
         getUser.forEach(function (user) {
             
             // Generating HTML Template for Tile
@@ -29,7 +29,7 @@ var main = function () {
             });
             $a.append($img);
             
-            var $h3 = $("<h3>").text(user.username);
+            var $h3 = $("<h3>").text(user.first + " " + user.last);
             
             var $chat_button = $("<div>").addClass("chat-button");
             var $button = $("<button>").attr({
@@ -73,7 +73,7 @@ var main = function () {
                 "class": "modal-title",
                 "id": "myModalLabel"
             })
-            $h4.text(user.first + " " + user.last)
+            $h4.text(user.username)
             $modal_header.append($button, $h4);
             
             
@@ -85,15 +85,18 @@ var main = function () {
                 "height": "140",
                 "class": "img-circle"
             });
-            $h3 = $("<h3>").addClass("media-headerin").text(user.first);
+            $h3 = $("<h3>").addClass("media-headerin").text(user.first + " " + user.last);
             $span = $("<span>").text("Languages ");
-            $language = $("<span>").addClass("label label-warning").text(user.lang);
-            $p = $("<p>").addClass("text-left");
-            $p.text(user.variable + " " + user.scientist);
-            $strong = $("<strong>").text("Bio: ").append("<br>");
+            $language = $("<span>").addClass("label label-warning").text(user.language);
+            $p = $("<p>").addClass("text-center");
+            $p.text(user.variable);
+            $strong = $("<strong>").text("Variable based on personality: ").append("<br>");
             $p.prepend($strong)
-            $modal_body.append($img, $h3, $span, $language, $("<hr>"), $p);
-            
+            $p1 = $("<p>").addClass("text-center");
+            $p1.text(user.scientist);
+            $strong1 = $("<strong>").text("Favorite computer scientist: ").append("<br>");
+            $p1.prepend($strong1)
+            $modal_body.append($img, $h3, $span, $language, $("<hr>"), $p, $p1);
             
             // // modal-footer
             $modal_footer = $("<div>").addClass("modal-footer");

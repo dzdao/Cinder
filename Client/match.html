@@ -116,7 +116,7 @@
                             </div>
 
                             <div class="chat-button">
-                                <a href="#aboutModal" data-toggle="modal" data-bind="attr: { 'data-target': '#myModal' + $index() }"><button class="btn btn-default" data-dismiss="modal">Hack me out!</button></a>
+                                <a href="#aboutModal" data-toggle="modal" data-bind="attr: { 'data-target': '#' + username }"><button class="btn btn-default" data-dismiss="modal">Hack me out!</button></a>
                             </div>
                         </div>
                     </li>
@@ -127,7 +127,7 @@
 
             <!-- Modal -->
             <div class="row main" id="userTiles" data-bind="foreach: users">
-                <div class="modal fade" data-bind="attr: { 'id': 'myModal' + $index() }" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal fade" data-bind="attr: { 'id': username }" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -151,8 +151,8 @@
 
                             </div>
                             <div class="modal-footer">
-                                <div class="modal-exit-button">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">I've heard enough about Joe</button>
+                            <div class="modal-exit-button">
+                                <button data-bind="text: 'I have heard enough about ' + first" type="button" class="btn btn-default" data-dismiss="modal"></button>
                             </div>
 
                             </div>
