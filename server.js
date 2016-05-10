@@ -105,6 +105,7 @@ app.get("/db.json", function(req, res){
 });
 
 // return an array of hacker buddies from user's profile to populate their homepage
+// ************************ Still working on this ****************
 // app.get("/buddies", loginRequired, function(req, res) {
 //     var buddies = [];
 //     //var data = { "username": "test"};
@@ -149,14 +150,6 @@ app.get("/checklogin", function(req, res) {
     }
 });
 
-// app.get("/", function(req, res) {
-//     res.redirect("/index.html");
-// });
-
-// app.get("/login", function(req, res) {
-//     res.redirect("/index.html");
-// });
-
 app.get("/profile", loginRequired, function(req, res) {
     res.redirect("/profile.html");
 });
@@ -196,7 +189,6 @@ app.post("/login", function(req, res) {
 });
 
 app.post("/register", function(req, res) {
-
     // check to make sure both password fields match
     if (req.body.pass1 === req.body.pass2) {
         var newUser = new Users({
@@ -209,7 +201,6 @@ app.post("/register", function(req, res) {
             scientist: req.body.scientist,
             variable: req.body.variable
         });
-
         // attempt to insert the new user account to mongo
         newUser.save(function(err) {
             if (err) {
