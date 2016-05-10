@@ -148,7 +148,7 @@ app.post("/login", function(req, res) {
         username: req.body.username
     }, function(err, user) {
         if (!user) {
-            res.send("Error. This user is not registered.");
+            res.send("you are not registered.");
         } else {
             if (user.password === req.body.password) {
                 console.log("Password matches");
@@ -159,7 +159,7 @@ app.post("/login", function(req, res) {
                 //res.redirect("/profile");
             } else {
                 console.log("Wrong password");
-                res.send("your email or password was wrong. ");
+                res.send("your email or password was wrong.");
             }
         }
     });
@@ -212,10 +212,11 @@ app.post("/updateProfile", loginRequired, function(req, res) {
             }
         },
         function(err) {
-            if (err !== null) {
-                res.send("Profile updated. ");
+            if (err === null) {
+                // Return json to trigger success function in $.ajax
+                res.json({ status:"Profile updated." });
             } else {
-                res.send("Error, could not update profile. " + err);
+                res.send("Updating database failed.");
             }
         });
 });
