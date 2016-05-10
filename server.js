@@ -21,14 +21,12 @@ app.listen(port, function() {
 mongo.connect(mongoURL);
 
 var userSchema = mongo.Schema({
-    username: String,
+    username: { type: String, unique: true }, // 1 unique username per account
     first: String,
     last: String,
-    email: {
-        type: String,
-        unique: true    // 1 unique email per account
-    },
+    email: { type: String, unique: true },    // 1 unique email per account
     password: String,
+    hackerBuddies: [String],
     language: String,
     scientist: String,
     variable: String
@@ -37,8 +35,6 @@ var userSchema = mongo.Schema({
 // access the collection table called Users
 var Users = mongo.model("Users", userSchema);
 
-
-// middleware below...
 // Set static route to html files.
 app.use(express.static(__dirname + "/Client"));
 
@@ -46,6 +42,7 @@ app.use(express.static(__dirname + "/Client"));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(bodyParser.json());
 
 // setup the configurations for client-sessions
 app.use(sessions({
@@ -63,13 +60,39 @@ app.use(sessions({
     //     emphemeral: true // deletes the cookie when browser is closed
 }));
 
-// still working on this
+// restrict user from trying to access static html pages?
 // app.use(function(req, res, next) {
-//     if (req.session.user && req.session.user) {
-//
+//     if ((req.path.indexOf("html") >= 0)){
+//         console.log("User trying to visit static html page");
+//         res.redirect("/login");
 //     }
+//     next();
 // });
 
+// checks for session info everytime user visits a page
+app.use(function(req, res, next) {
+    if (req.session && req.session.user) {
+        Users.findOne({ email: req.session.user.email}, function(err, user) {
+            if(user){
+                req.user = user;
+                delete req.user.password;
+                req.session.user = req.user;    // refresh the session
+            }
+        next();
+        });
+    } else {
+        next();
+    }
+});
+
+function loginRequired(req, res, next) {
+    if(!req.user){
+        console.log("User must be logged in to access this page");
+        res.redirect("/index.html#login");
+    } else {
+        next();
+    }
+}
 
 /* ROUTES are defined below */
 app.get("/db.json", function(req, res){
@@ -81,15 +104,69 @@ app.get("/db.json", function(req, res){
     res.send(db.users);
 });
 
+// return an array of hacker buddies from user's profile to populate their homepage
+// app.get("/buddies", loginRequired, function(req, res) {
+//     var buddies = [];
+//     //var data = { "username": "test"};
+//     //buddies.push(data);
+//     Users.findOne({ username: req.session.user.username },
+//
+//         function(err, user) {
+//             if (err) {
+//                 res.send("Error. " + err);
+//             } else {
+//                     console.log("getting buddies");
+//
+//                     var len = user.hackerBuddies.length;
+//                     for(var i = 0; i < len; i++)
+//                     {
+//                         Users.findOne({ username: user.hackerBuddies[i] }, function(error, buddy) {
+//                             if(!buddy) {
+//                                 console.log("Buddy wasn't found");
+//                             }
+//                             else {
+//                                 console.log("pushing buddy: " + buddy);
+//                                 buddies.push(JSON.stringify(buddy));
+//                                 console.log(buddies[i]);
+//                             }
+//                         });
+//
+//                     }
+//
+//             }
+//             console.log("sending");
+//             res.send(buddies);
+//
+//     });
+//
+// });
+
 app.get("/checklogin", function(req, res) {
     if (req.session && req.session.user) {
-        res.send(req.session.user.username);
+        res.status("200").send(req.session.user.username);
     } else {
-        res.status("401").send({
-            error: "Unauthorized. Please login first"
-        });
-        //res.send("401");
+        res.status("401").send({ error: "Unauthorized. Please login first" });
     }
+});
+
+// app.get("/", function(req, res) {
+//     res.redirect("/index.html");
+// });
+
+// app.get("/login", function(req, res) {
+//     res.redirect("/index.html");
+// });
+
+app.get("/profile", loginRequired, function(req, res) {
+    res.redirect("/profile.html");
+});
+
+app.get("/match", loginRequired, function(req, res) {
+    res.redirect("/match.html");
+});
+
+app.get("/settings", loginRequired, function(req, res) {
+    res.redirect("/settings.html");
 });
 
 // login via mongoDB accounts database
@@ -105,11 +182,14 @@ app.post("/login", function(req, res) {
         } else {
             if (user.password === req.body.password) {
                 console.log("Password matches");
+                console.log(user);
                 req.session.user = user;
-                res.json(user);
+                res.json({ success: "logged in" });
+                //res.status("200").json({ success: "logged in." });
+                //res.redirect("/profile");
             } else {
                 console.log("Wrong password");
-                res.send("Error. Wrong email or password");
+                res.send("your email or password was wrong. ");
             }
         }
     });
@@ -133,9 +213,10 @@ app.post("/register", function(req, res) {
         // attempt to insert the new user account to mongo
         newUser.save(function(err) {
             if (err) {
+                console.log(err);
                 var error = "Error... Try again!";
                 if (err.code === 11000) {
-                    error = "Email already registered. Please register with another email.";
+                    error = "Email or username has already registered. ";
                 }
                 res.send(error);
             } else {
@@ -146,80 +227,77 @@ app.post("/register", function(req, res) {
             }
         });
     } else {
-        res.send("Error. Make sure your passwords match.");
+        res.send("Make sure your passwords match. ");
     }
 });
 
-app.post("/updateProfile", function(req, res) {
+// allows users to update user profile from settings page
+app.post("/updateProfile", loginRequired, function(req, res) {
     console.log("User is updating profile");
 
-    if (req.session && req.session.user.email) {
-        Users.update({
-                email: req.session.user.email
-            }, {
-                $set: {
-                    language: req.body.language,
-                    scientist: req.body.scientist,
-                    variable: req.body.variable
-                }
-            },
-            function(err) {
-                if (err !== null) {
-                    res.send("Profile updated.");
-                } else {
-                    res.send("Error, could not update profile." + err);
-                }
-            });
-    } else {
-        res.redirect("/login");
-    }
+    Users.update({ email: req.session.user.email },
+        {
+            $set: {
+                language: req.body.language,
+                scientist: req.body.scientist,
+                variable: req.body.variable
+            }
+        },
+        function(err) {
+            if (err !== null) {
+                res.send("Profile updated. ");
+            } else {
+                res.send("Error, could not update profile. " + err);
+            }
+        });
 });
 
-app.get("/dashboard", function(req, res) {
+// a right swipe on the match page adds a buddy to their favorites
+app.post("/addBuddy", loginRequired, function(req, res) {
+    var newBuddy = req.body.username;
+    console.log("User is adding a new hacker buddy! " + newBuddy);
 
-    if (req.session && req.session.user) {
-        var data = req.session.user;
-        delete data.password; // remove the user password from object
-
-        //res.send(req.session.user);
-        res.send(data);
-    } else {
-        res.status("401").send({
-            error: "Unauthorized. Please login first"
+    Users.update({ email: req.session.user.email },
+        {
+            $push: { hackerBuddies : newBuddy }
+        },
+        function(err) {
+            if (err !== null) {
+                res.send("Hacker buddy was added!");
+            } else {
+                res.send("Error, could not add buddy." + err);
+            }
         });
-    }
 });
 
 app.get("/logout", function(req, res) {
-
     console.log("User logging out");
     req.session.reset(); // erase session cookies
     res.redirect("/");
 });
 
-app.get("/customData", function(req, res) {
-    if (req.session && req.session.user) {
-        Users.findOne({
-            email: req.session.user.email
-        }, function(err, user) {
-            if (err) {
+// returns user attributes
+app.get("/customData", loginRequired, function(req, res) {
+    Users.findOne({ email: req.session.user.email }, function(err, user) {
+        if (err) {
+            res.json({ error: err });
+        } else {
+            // returns the following
+            // var data = {
+            //     username: String,
+            //     first: String,
+            //     last: String,
+            //     email : String,
+            //     language : String,
+            //     scientist : String,
+            //     variable : String
+            // }
 
-            } else {
-                // var data = {
-                //     email : user.email,
-                //     language : user.language,
-                //     scientist : user.scientist,
-                //     variable : user.variable
-                // }
-
-                var data = user;
-                delete data.password; // remove the user password from object
-                res.json(data);
-            }
-        });
-    } else {
-        res.status("401").send({
-            error: "Unauthorized. Please login first"
-        });
-    }
+            var data = user;
+            delete data.password; // remove the user password from object
+            delete data.hackerBuddies;
+            console.log(data);
+            res.json(data);
+        }
+    });
 });
