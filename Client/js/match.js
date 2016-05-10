@@ -58,7 +58,7 @@ var jTinder = function () {
             var $container = $(".wrap");
             
             if(likedList.length === 0) {
-                noMatchPrompt();
+                noMatchPrompt("We ran out of your matches. :(");
             } else {
                 $container.append($("<h4>").text("You liked:"));
                 
@@ -185,7 +185,7 @@ var jTinder = function () {
 
 // $(document).ready(main);
 
-var noMatchPrompt = function () {
+var noMatchPrompt = function (msg) {
     var powerfulQuotes = [
         { 
             first: "“And suddenly you just know … ",
@@ -210,18 +210,18 @@ var noMatchPrompt = function () {
     ];
     
     var $icon = $("<i>").attr( { class: "fa fa-heart fa-5x fa-fw margin-bottom", "aria-hidden":"true" } );
-    var $p1 = $("<h3>").text("Cannot find your match");
+    $("span h3").remove();
+    var $h3 = $("<h3>").text(msg);
     var quote = _.sample(powerfulQuotes);
     var $p2 = $("<p>").text(quote.first);
     var $p3 = $("<p>").text(quote.second);
     
-    var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $p1, $p2, $p3).fadeIn();
+    var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $h3, $p2, $p3).fadeIn();
     $(".wrap").append($span);
 }
 
 function appViewModel () {
     var $tinderSlideDiv = $("#tinderslide");
-    var noMatch = false;
     
     // Populate a match page
     $tinderSlideDiv.hide();
@@ -243,30 +243,28 @@ function appViewModel () {
         type: "GET", 
         dataType: "json",
         success: function (data) {
-            console.log(data.status);
             if(data.length === 0) {
-                noMatch = true;
-            }
-            else {
-                self.users(data);
-                    
                 setTimeout(function () {
                     $(".wrap span i, .wrap span p").fadeOut(function () {
                         $(".wrap span i, .wrap span p, .wrap span br").remove();
-                        
-                        if(noMatch === false) {
-                            $tinderSlideDiv.slideDown();
-                            jTinder();
-                        }
-                        else {
-                            noMatchPrompt();
-                        }
+                            noMatchPrompt("Cannnot find your match");
+                    });
+                }, 2000);
+            }
+            else {
+                self.users(data);
+                setTimeout(function () {
+                    $(".wrap span i, .wrap span p").fadeOut(function () {
+                        $(".wrap span i, .wrap span p, .wrap span br").remove();
+
+                        $tinderSlideDiv.slideDown();
+                        jTinder();
                     });
                 }, 2000);
             }
         },
         error: function (error){
-            $(".wrap span p").text(error.responseText).fadeIn();
+            // $(".wrap span p").text(error.responseText).fadeIn();
         }
     });
     
