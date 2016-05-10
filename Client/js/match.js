@@ -58,7 +58,7 @@ var jTinder = function () {
             var $container = $(".wrap");
             
             if(likedList.length === 0) {
-                noMatchPrompt("We ran out of your matches. : (");
+                noMatchPrompt(false, "We ran out of your matches. : (");
             } else {
                 $container.append($("<h4>").text("You liked:"));
                 
@@ -81,7 +81,7 @@ var jTinder = function () {
     }
 
     var flickResponse = function (effect) {
-            $('#status').html(effect.emoji).show().delay(500).fadeOut();
+            $('#status').html(effect.emoji).show();
             audio = new Audio("../sounds/" + effect.soundFile);
             audio.play();
     };
@@ -142,7 +142,7 @@ var jTinder = function () {
     });
 }
 
-var noMatchPrompt = function (msg) {
+var noMatchPrompt = function (showHeart, msg) {
     var powerfulQuotes = [
         { 
             first: "“And suddenly you just know … ",
@@ -166,7 +166,11 @@ var noMatchPrompt = function (msg) {
         }
     ];
     
-    var $icon = $("<i>").attr( { class: "fa fa-heart fa-5x fa-fw margin-bottom", "aria-hidden":"true" } );
+    var $icon;
+    if(showHeart) {
+        $icon = $("<i>").attr( { class: "fa fa-heart-o fa-5x fa-fw margin-bottom", "aria-hidden":"true" } );
+    }
+    
     $("span h3").remove();
     var $h3 = $("<h3>").text(msg);
     var quote = _.sample(powerfulQuotes);
@@ -210,7 +214,7 @@ function appViewModel () {
                 setTimeout(function () {
                     $(".wrap span i, .wrap span p").fadeOut(function () {
                         $(".wrap span i, .wrap span p, .wrap span br").remove();
-                            noMatchPrompt("Cannnot find your match");
+                            noMatchPrompt(true, "Cannnot find your match");
                     });
                 }, 2000);
             }
