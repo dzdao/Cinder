@@ -58,7 +58,7 @@ var jTinder = function () {
             var $container = $(".wrap");
             
             if(likedList.length === 0) {
-                noMatchPrompt("We ran out of your matches. :(");
+                noMatchPrompt("We ran out of your matches. : (");
             } else {
                 $container.append($("<h4>").text("You liked:"));
                 
@@ -71,12 +71,12 @@ var jTinder = function () {
                 $("span h3").remove();
                 $container.fadeOut().empty();
                 $container.append($("<h4>").text("Redirecting to a profile page...")).fadeIn();
-            }, 8000);
+            }, 6000);
             
             setTimeout(function () {
                 location.reload();
                 window.location.replace("/profile.html");
-            }, 12000);
+            }, 10000);
         });
     }
 
