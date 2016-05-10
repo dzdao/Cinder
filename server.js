@@ -106,41 +106,18 @@ app.get("/db.json", function(req, res){
 
 // return an array of hacker buddies from user's profile to populate their homepage
 // ************************ Still working on this ****************
-// app.get("/buddies", loginRequired, function(req, res) {
-//     var buddies = [];
-//     //var data = { "username": "test"};
-//     //buddies.push(data);
-//     Users.findOne({ username: req.session.user.username },
-//
-//         function(err, user) {
-//             if (err) {
-//                 res.send("Error. " + err);
-//             } else {
-//                     console.log("getting buddies");
-//
-//                     var len = user.hackerBuddies.length;
-//                     for(var i = 0; i < len; i++)
-//                     {
-//                         Users.findOne({ username: user.hackerBuddies[i] }, function(error, buddy) {
-//                             if(!buddy) {
-//                                 console.log("Buddy wasn't found");
-//                             }
-//                             else {
-//                                 console.log("pushing buddy: " + buddy);
-//                                 buddies.push(JSON.stringify(buddy));
-//                                 console.log(buddies[i]);
-//                             }
-//                         });
-//
-//                     }
-//
-//             }
-//             console.log("sending");
-//             res.send(buddies);
-//
-//     });
-//
-// });
+app.get("/buddies", loginRequired, function(req, res) {
+    Users.findOne({ username: req.session.user.username },
+        function(err, user) {
+            if (err) {
+                res.send("Error. " + err);
+            } else {
+                Users.find({ username: { $in: user.hackerBuddies } }, function (err, data) {
+                    res.send(data);
+                });
+            }
+    });
+});
 
 app.get("/checklogin", function(req, res) {
     if (req.session && req.session.user) {
