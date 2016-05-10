@@ -250,10 +250,11 @@ app.post("/addBuddy", loginRequired, function(req, res) {
 
     Users.update({ email: req.session.user.email },
         {
-            $push: { hackerBuddies : newBuddy }
+            $addToSet: { hackerBuddies : newBuddy }
         },
         function(err) {
-            if (err !== null) {
+            
+            if (err === null) {
                 res.send("Hacker buddy was added!");
             } else {
                 res.send("Error, could not add buddy." + err);

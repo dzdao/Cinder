@@ -66,6 +66,17 @@ var jTinder = function () {
                     $container.append($("<p>").text(name)).slideDown();
                 });
             }
+            
+            setTimeout(function () {
+                $("span h3").remove();
+                $container.fadeOut().empty();
+                $container.append($("<h4>").text("Redirecting to a profile page...")).fadeIn();
+            }, 8000);
+            
+            setTimeout(function () {
+                location.reload();
+                window.location.replace("/profile.html");
+            }, 12000);
         });
     }
 
@@ -96,8 +107,21 @@ var jTinder = function () {
         // like callback
         onLike: function (item) {
             currentIndex = item.index();
-            likedList.push($(".fade:nth-child(" + (currentIndex + 1) + ") h4").text());
-            
+            var username = $(".fade:nth-child(" + (currentIndex + 1) + ") h4").text();
+            likedList.push(username);
+            $.ajax({
+                url: "/addBuddy",
+                type: "POST", 
+                dataType: "json",
+                data: { username: username },
+                success: function (res) {
+                    console.log(res.responseText);
+                },
+                error: function (res) {
+                    console.log(res.responseText);
+                }
+            });
+                
             // set the status text
             var effect = _.sample(likedEffects, 1)[0];
 
