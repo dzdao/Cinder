@@ -4,6 +4,10 @@
     /*padding: 5%;*/
 }
 
+div.hidden {
+    display: none;
+}
+
 #tinderslide {
     position: relative;
     /*background: #fff;*/

@@ -118,78 +118,11 @@ var jTinder = function () {
     });
 }
 
-// var main = function () {
-//     "use strict";
-//     /**
-//      * jTinder initialization
-//      */
-    
-//     var $tinderSlideDiv = $("#tinderslide");
-    
-//     // Populate a match page
-//     $tinderSlideDiv.hide();
-    
-//     var $icon = $("<i>").attr( { class: "fa fa-refresh fa-spin fa-3x fa-fw margin-bottom" } );
-//     var $p = $("<p>").text("Matching...");
-    
-//     var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $p);
-//     $(".wrap").append($span);
-    
-//     $.get("/matchUsers", function (data) {
-//         if(data.length === 0) {
-//             console.log("No match");
-//         }
-//         else {
-//             var count = 1;
-//             data.forEach(function (user) {
-                
-//                 // Creat new user tile
-//                 var $userProfileImg = $("<img>").attr({
-//                     src: "../img/portfolio/formal guy.png",
-//                     name: "aboutme",
-//                     width: "235",
-//                     height: "235",
-//                     class: "img-thumbnail"});
-                    
-//                 var $userNameH3 = $("<h3>").text(user.first + " " +user.last);
-                
-//                 var $newTileDiv = $("<div>").addClass("tile").append($userProfileImg, $userNameH3);
-
-//                 var $buttonA = $("<a>").attr({
-//                     href: "#aboutModal",
-//                     "data-toggle": "modal",
-//                     "data-target": "#myModal" + count,
-//                 }).append($("<button>").attr({
-//                     class: "btn btn-default",
-//                     "data-dismiss": "modal"
-//                 }).text("Hack me out!"));
-                
-//                 var $buttonDiv = $("<div>").addClass("chat-button").append($buttonA);
-                
-//                 var $newCardLi = $("<li>").addClass("pane").append($("<div>").addClass("span3 well").append($newTileDiv, $buttonDiv));
-//                 var $swipeCardUl = $("#tinderslide ul").append($newCardLi);
-//             });
-            
-//             count++;
-//         }
-//     }).done( function () {
-//         setTimeout(function () {
-//             $(".wrap span i, .wrap span p").fadeOut(function () {
-//                 $(".wrap span i, .wrap span p, .wrap span br").remove();
-//                 $tinderSlideDiv.slideDown();
-//                 jTinder();
-//             });
-//         }, 2000);
-//     } );
-// }
-
-// $(document).ready(main);
-
 var noMatchPrompt = function (msg) {
     var powerfulQuotes = [
         { 
             first: "“And suddenly you just know … ",
-            second: "it’s time to start something new and trust the magic of beginnings.” -Meister Eckhart"
+            second: "it’s time to start something new and trust the magic of beginnings.” - Meister Eckhart"
         },
         {
             first: "“It might take a year. It might take a day.",
@@ -220,17 +153,23 @@ var noMatchPrompt = function (msg) {
     $(".wrap").append($span);
 }
 
+ko.bindingHandlers.fadeVisible = {
+    init: function(element, valueAccessor) {
+        var shouldDisplay = valueAccessor();
+        $(element).toggle(shouldDisplay);
+    },
+    update: function(element, valueAccessor) {
+        var shouldDisplay = valueAccessor();
+        shouldDisplay ? $(element).fadeIn() : $(element).fadeOut();
+    }
+};
+
 function appViewModel () {
     var $tinderSlideDiv = $("#tinderslide");
     
     // Populate a match page
     $tinderSlideDiv.hide();
     
-    var $icon = $("<i>").attr( { class: "fa fa-refresh fa-spin fa-3x fa-fw margin-bottom" } );
-    var $p = $("<p>").text("Matching...");
-    
-    var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $p);
-    $(".wrap").append($span);
     var self = this;
     self.users = ko.observableArray([]);
     
@@ -253,10 +192,10 @@ function appViewModel () {
             }
             else {
                 self.users(data);
+                $tinderSlideDiv.removeClass("hidden");
                 setTimeout(function () {
                     $(".wrap span i, .wrap span p").fadeOut(function () {
                         $(".wrap span i, .wrap span p, .wrap span br").remove();
-
                         $tinderSlideDiv.slideDown();
                         jTinder();
                     });
@@ -264,7 +203,7 @@ function appViewModel () {
             }
         },
         error: function (error){
-            // $(".wrap span p").text(error.responseText).fadeIn();
+            $(".wrap span p").text(error.responseText).fadeIn();
         }
     });
     
