@@ -16,38 +16,52 @@ var main = function () {
         
     });
     
+    // handler for submitting chat
+    $('#chat-message').keypress(function(e){
+        
+        // if user presses enter to send chat
+        if(e.keyCode==13){
+            $('#chat-submit').click()
+            console.log("submitted");
+            e.preventDefault();
+        }
+    });
     
-    $("#chat-submit").on("click", function(e){
+    // trigger click event
+    $("#chat-submit").on("click", function (e) {
         // prevent from submitting form
         e.preventDefault();
-        
+
         var msg = $("#chat-message").val();
-        socket.emit('chat', {msg: msg, userToSend: userToSendMesssage, userWhoSent: curUser});
+        socket.emit('chat', { msg: msg, userToSend: userToSendMesssage, userWhoSent: curUser });
         console.log(msg);
-        
+
         //Append current message the user just wrote to her/his chatbox
-        
+
         var $chat_msg = $("<div>").addClass("chat-message clearfix");
         var $img = $("<img>")//.attr({
         //     "src": "http://gravatar.com/avatar/2c0ad52fc5943b78d6abe069cc08f320?s=32"
         // })
-        
+
         var $chat_msg_content = $("<div>").addClass("chat-message-content clearfix");
-        
+
         // things to append to $chat_msg_content
         var $chat_time = $("<span>").addClass("chat-time").text("11:11pm")
         var $h5 = $("<h5>").text(curUser);
         var $p = $("<p>").text(msg);
-        
+
         $chat_msg_content.append($chat_time, $h5, $p);
-        
+
         $chat_msg.append($img, $chat_msg_content);
         $(".chat-history").append($chat_msg, $("<hr>"));
-        
+
         // end of generateing message to chatbox
-   
+
         $("#chat-message").val('')
+        return false;
     });
+   
+
     
 
     
