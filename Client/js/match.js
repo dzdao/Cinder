@@ -4,7 +4,7 @@ var jTinder = function () {
     var likedList = [];
     var dislikedList = [];
     var currentIndex = -1;
-    
+
     var $tinderSlideDiv = $("#tinderslide");
 
     var likedEffects = [
@@ -52,27 +52,27 @@ var jTinder = function () {
             soundFile: "angry-face.mp3"
         }
     ];
-    
+
     var showResult = function () {
         $tinderSlideDiv.delay(800).hide( function () {
             var $container = $(".wrap");
-            
+
             if(likedList.length === 0) {
                 noMatchPrompt(false, "We ran out of your matches.");
             } else {
                 $container.append($("<h4>").text("You liked:"));
-                
+
                 likedList.forEach(function (name) {
                     $container.append($("<p>").text(name)).slideDown();
                 });
             }
-            
+
             setTimeout(function () {
                 $("span h3").remove();
                 $container.fadeOut().empty();
                 $container.append($("<h3>").text("Redirecting to a profile page...")).fadeIn(300);
             }, 7000);
-            
+
             setTimeout(function () {
                 location.reload();
                 window.location.replace("/profile.html");
@@ -111,7 +111,7 @@ var jTinder = function () {
             likedList.push(username);
             $.ajax({
                 url: "/addBuddy",
-                type: "POST", 
+                type: "POST",
                 dataType: "json",
                 data: { username: username },
                 success: function (res) {
@@ -121,7 +121,7 @@ var jTinder = function () {
                     console.log(res.responseText);
                 }
             });
-                
+
             // set the status text
             var effect = _.sample(likedEffects, 1)[0];
 
@@ -131,7 +131,7 @@ var jTinder = function () {
 
             flickResponse(effect);
             lastEffect = effect;
-            
+
             if (currentIndex === 0) {
                 showResult();
             }
@@ -144,7 +144,7 @@ var jTinder = function () {
 
 var noMatchPrompt = function (showHeart, msg) {
     var powerfulQuotes = [
-        { 
+        {
             first: "“And suddenly you just know … ",
             second: "it’s time to start something new and trust the magic of beginnings.” - Meister Eckhart"
         },
@@ -154,56 +154,56 @@ var noMatchPrompt = function (showHeart, msg) {
         },
         {
             first: "“We are sometimes taken into troubled waters",
-            second: "not be drowned but to be cleansed.” - Unkown"
+            second: "not be drowned but to be cleansed.” - Unknown"
         },
         {
             first: "“Difficult roads",
-            second: "often lead to beautiful destinations.” - Unkown"
+            second: "often lead to beautiful destinations.” - Unknown"
         },
         {
             first: "“Faith and fear both demand you believe",
             second: "in something you cannot see. You choose.” – Bob Proctor"
         }
     ];
-    
+
     var $icon;
     if(showHeart) {
         $icon = $("<i>").attr( { class: "fa fa-heart-o fa-5x fa-fw margin-bottom", "aria-hidden":"true" } );
     }
-    
+
     $("span h3").remove();
     var $h3 = $("<h3>").text(msg);
     var quote = _.sample(powerfulQuotes);
     var $p2 = $("<p>").text(quote.first);
     var $p3 = $("<p>").text(quote.second);
-    
+
     var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $h3, $p2, $p3).fadeIn(300);;
     $(".wrap").append($span);
 }
 
 function appViewModel () {
     var $tinderSlideDiv = $("#tinderslide");
-    
+
     // Populate a match page
     $tinderSlideDiv.hide();
-    
+
     var self = this;
     self.users = ko.observableArray([]);
-    
+
     var incrementCount = function () {
-        
+
     }
-        
+
     $.ajax({
         url: "/matchUsers",
-        type: "GET", 
+        type: "GET",
         dataType: "json",
         success: function (data) {
             if(data.length === 0) {
                 setTimeout(function () {
                     $(".wrap span i, .wrap span p").fadeOut(function () {
                         $(".wrap span i, .wrap span p, .wrap span br").remove();
-                            noMatchPrompt(true, "Cannnot find your match");
+                            noMatchPrompt(true, "Cannot find your match");
                     });
                 }, 2000);
             }
@@ -223,7 +223,7 @@ function appViewModel () {
             $(".wrap span p").text(error.responseText).fadeIn();
         }
     });
-    
+
 }
 
 ko.applyBindings( new appViewModel() );
