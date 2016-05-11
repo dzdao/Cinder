@@ -70,13 +70,13 @@ var jTinder = function () {
             setTimeout(function () {
                 $("span h3").remove();
                 $container.fadeOut().empty();
-                $container.append($("<h4>").text("Redirecting to a profile page...")).fadeIn();
-            }, 6000);
+                $container.append($("<h3>").text("Redirecting to a profile page...")).fadeIn(300);
+            }, 7000);
             
             setTimeout(function () {
                 location.reload();
                 window.location.replace("/profile.html");
-            }, 10000);
+            }, 11000);
         });
     }
 
@@ -177,20 +177,9 @@ var noMatchPrompt = function (showHeart, msg) {
     var $p2 = $("<p>").text(quote.first);
     var $p3 = $("<p>").text(quote.second);
     
-    var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $h3, $p2, $p3).fadeIn();
+    var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $h3, $p2, $p3).fadeIn(300);;
     $(".wrap").append($span);
 }
-
-ko.bindingHandlers.fadeVisible = {
-    init: function(element, valueAccessor) {
-        var shouldDisplay = valueAccessor();
-        $(element).toggle(shouldDisplay);
-    },
-    update: function(element, valueAccessor) {
-        var shouldDisplay = valueAccessor();
-        shouldDisplay ? $(element).fadeIn() : $(element).fadeOut();
-    }
-};
 
 function appViewModel () {
     var $tinderSlideDiv = $("#tinderslide");

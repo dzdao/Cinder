@@ -12,6 +12,7 @@ http://bootsnipp.com/snippets/25zz and http://www.bootply.com/qof7bxKmBp
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     color: #333;
+    margin-top: 50px;
 }
 
 .tile, .chat-button, .modal-body, .modal-footer, .modal-exit-button{
