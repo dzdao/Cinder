@@ -30,10 +30,10 @@ var main = function () {
                 "data-target": "#" + user.username
             });
             var $img = $("<img>").attr({
-                "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R",
+                "src": "../" + user.picURL,
                 "width": "140",
                 "height": "140",
-                "class": "img-circle"
+                "class": "img-thumbnail"
             });
             $a.append($img);
             
@@ -88,10 +88,10 @@ var main = function () {
             // modal-body
             $modal_body = $("<div>").addClass("modal-body");
             $img = $("<img>").attr({
-                "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R",
+                "src": "../" + user.picURL,
                 "width": "140",
                 "height": "140",
-                "class": "img-circle"
+                "class": "img-thumbnail"
             });
             $h3 = $("<h3>").addClass("media-headerin").text(user.first + " " + user.last);
             $span = $("<span>").text("Languages ");

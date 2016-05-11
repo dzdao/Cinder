@@ -4,9 +4,37 @@ var express = require("express"),
     bodyParser = require("body-parser"),
     mongo = require("mongoose"),
     sessions = require("client-sessions"),
+    multer = require("multer"),
     app = express(),
     port = process.env.PORT || 8000,
     mongoURL = process.env.MONGODB_URI || "mongodb://localhost/accounts";
+
+// Storage for uploaded photos
+ var storage =   multer.diskStorage({
+   destination: function (req, file, callback) {
+     callback(null, "./Client/img/profile_pic");
+   },
+    //  Replace Date() by real userId we have new file name with format: userPhoto-userId
+   filename: function (req, file, callback) {
+     var indexAnExtensionBegins = file.originalname.indexOf(".");
+     var fileExtension = file.originalname.substr(indexAnExtensionBegins, file.originalname.length - indexAnExtensionBegins);
+        Users.update({ username: req.session.user.username },
+            {
+                $set: {
+                    picURL: "img/profile_pic/" + req.session.user._id + fileExtension
+                }
+            }, function (err) {
+               if (err !== null) {
+                   console.log("Cannot update a profile picture");
+               }
+            }
+        );
+     callback(null, req.session.user._id + fileExtension);
+   }
+ });
+ 
+ // Upload function
+ var upload = multer({ storage : storage}).single("profile_pic");
 
 // Start listening at port 3000
 app.listen(port, function() {
@@ -25,7 +53,8 @@ var userSchema = mongo.Schema({
     hackerBuddies: [String],
     language: String,
     scientist: String,
-    variable: String
+    variable: String,
+    picURL: String
 });
 
 // access the collection table called Users
@@ -91,6 +120,24 @@ function loginRequired(req, res, next) {
 }
 
 /* ROUTES are defined below */
+
+app.get("/userSession", function (req, res) {
+    res.json(req.session.user);
+});
+
+// Route for uploading a profile picture
+app.post("/postProfilePic",function(req,res){
+     upload(req, res, function(err) {
+         if(err) {
+           console.log("Error uploading file.");
+           res.redirect("settings.html")
+         }
+         else {
+            console.log("File is uploaded");
+            res.redirect("settings.html")
+         }
+     });
+ });
 
 // return an array of hacker buddies from user's profile to populate their homepage
 // ************************ Still working on this ****************
@@ -178,7 +225,8 @@ app.post("/register", function(req, res) {
             password: req.body.pass1,
             language: req.body.language,
             scientist: req.body.scientist,
-            variable: req.body.variable
+            variable: req.body.variable,
+            picURL: req.body.picURL
         });
         // attempt to insert the new user account to mongo
         newUser.save(function(err) {
@@ -208,6 +256,11 @@ app.post("/updateProfile", loginRequired, function(req, res) {
     Users.update({ email: req.session.user.email },
         {
             $set: {
+                username: req.body.username,
+                first: req.body.first,
+                last: req.body.last,
+                email: req.body.email,
+                password: req.body.pass,
                 language: req.body.language,
                 scientist: req.body.scientist,
                 variable: req.body.variable

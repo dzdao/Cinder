@@ -58,7 +58,7 @@ var jTinder = function () {
             var $container = $(".wrap");
             
             if(likedList.length === 0) {
-                noMatchPrompt(false, "We ran out of your matches. : (");
+                noMatchPrompt(false, "We ran out of your matches.");
             } else {
                 $container.append($("<h4>").text("You liked:"));
                 

@@ -48,7 +48,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#page-top">Cinder</a>
+                <a class="navbar-brand" href="/index.html#page-top">Cinder</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -60,20 +60,9 @@
                     <li class="page-scroll" id="nav-match">
                         <a href="/match">Let Us Chill</a>
                     </li>
-                    <!--<li class="page-scroll">
-                        <a href="#portfolio">Portfolio</a>
-                    </li>-->
                     <li class="page-scroll" id="nav-profile">
                         <a href="/profile">Profile</a>
                     </li>
-                    <!--<li class="page-scroll">
-                        <a href="#about">About</a>
-                    </li>-->
-                    <li class="page-scroll" id="nav-signup">
-                        <a href="/index.html#signup">Signup</a>
-                    </li>
-                    <li class="page-scroll" id="nav-login">
-                        <a href="/index.html#login">Login</a>
                     </li>
                     <li class="page-scroll" id="nav-logout">
                         <a href="/logout">Logout</a>
@@ -89,28 +78,47 @@
     </nav>
 
     <!-- Header -->
-    <!--<header>
+    <header>
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <img class="img-responsive" src="img/profile.png" alt="">
+                    <img id="profilePic" class="img-thumbnail" alt="formal lady" height="300" width="300">
+                    <div class="edit"><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil fa-2x"></i></a></div>
                     <div class="intro-text">
-                        <span class="name">Cinder</span>
-                        <hr class="star-light">
-                        <span class="skills">Connect - Code - Github and Chill</span>
+                        <span class="name"></span>
                     </div>
                 </div>
             </div>
         </div>
-    </header>-->
+    </header>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Upload a new profile pic</h4>
+        </div>
+        <div class="modal-body">
+            <form enctype = "multipart/form-data" method = "post" action="/postProfilePic">
+                <input type="file" name="profile_pic">
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Upload Image</button>
+            </form>
+        </div>
+        </div>
+    </div>
+    </div>
 
     <!-- Settings Section -->
     <section id="settings">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <br>
-                    <br>
                     <h2>Update Your Profile</h2>
                     <hr class="star-primary">
                 </div>
@@ -118,6 +126,41 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2">
                     <form name="update" id="updateForm">
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Username</label>
+                                <input type="text" class="form-control" placeholder="Username" id="signup-userid" required data-validation-required-message="Please enter your name.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" placeholder="First Name" id="fname" required data-validation-required-message="Please enter your name.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" placeholder="Last Name" id="lname" required data-validation-required-message="Please enter your name.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Email Address</label>
+                                <input type="email" class="form-control" placeholder="Email Address" id="email" required data-validation-required-message="Please enter your email address.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Password</label>
+                                <input type="password" class="form-control" placeholder="Enter your password" id="signup-pass1" required data-validation-required-message="Please enter a password.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
                         <div class="survey-questions">
                             <p>What's your favorite programming language?</p>
                                 <select type="text" id="language" form="updateForm">
@@ -225,7 +268,7 @@
     <script src="js/contact_me.js"></script>
 
     <!-- User Authentication JavaScript -->
-    <script src="js/user_auth.js"></script>
+    <script src="js/settings.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="js/freelancer.js"></script>

@@ -110,7 +110,7 @@
                     <li class="pane">
                         <div class="span3 well">
                             <div class="tile">
-                                <img src="../img/portfolio/formal guy.png"
+                                <img data-bind="attr: { 'src': '../' + picURL }"
                                         name="aboutme" width="235" height="235" class="img-thumbnail">
                                 <h3 data-bind="text: first + ' ' + last"></h3>
                             </div>
@@ -136,8 +136,8 @@
                             </div>
                             <div class="modal-body">
 
-                                    <img src="../img/portfolio/formal guy.png" name="aboutme"
-                                        width="140" height="140" border="0" class="img-circle"></a>
+                                    <img data-bind="attr: { 'src': '../' + picURL }" name="aboutme"
+                                        width="140" height="140" border="0" class="img-thumbnail"></a>
                                     <h3 data-bind="text: first + ' ' + last" class="media-heading"></h3>
                                     <span><strong>Languages </strong></span>
                                     <span data-bind="text: language" class="label label-warning"></span>

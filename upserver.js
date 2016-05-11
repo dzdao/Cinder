@@ -4,25 +4,34 @@
  var express =   require("express");
  var multer  =   require("multer");
  var app     =   express();
+ 
  var storage =   multer.diskStorage({
    destination: function (req, file, callback) {
      callback(null, "./userphotos");
    },
     //  Replace Date() by real userId we have new file name with format: userPhoto-userId
    filename: function (req, file, callback) {
-     callback(null, file.fieldname + "-" + Date.now());
+     var indexAnExtensionBegins = file.originalname.indexOf(".");
+     var fileExtension = file.originalname.substr(indexAnExtensionBegins, file.originalname.length - indexAnExtensionBegins);
+
+     callback(null, file.fieldname + "-" + Date.now() + fileExtension);
    }
  });
- var upload = multer({ storage : storage}).single("userPhoto");
+ 
+ var upload = multer({ storage : storage}).single("profile_pic");
  app.use(express.static(__dirname + "/"));
- app.post("/",function(req,res){
-     upload(req,res,function(err) {
+ 
+ app.post("/postProfilePic",function(req,res){
+     upload(req, res, function(err) {
          if(err) {
            console.log("Error uploading file.");
-             return res.end();
+           res.send("File failed to upload")
+           return res.end();
          }
+         
          console.log("File is uploaded");
-         res.end();
+         res.send("File uploaded")
+         return res.end();
      });
  });
 

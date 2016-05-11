@@ -7,14 +7,10 @@
   <!-- <script src="app.js"></script>
   <input type="file" class="file" id="attachement" name="attachement" style="display: none;" onchange="fileSelected(this)">
   <input type="button" class="file" id="btnAttachment" onclick="openAttachment()" value="Upload File"> -->
-  <form id        =  "uploadForm"
-       enctype   =  "multipart/form-data"
-       action    =  "/"
-       method    =  "post"
-  >
+  <form enctype = "multipart/form-data" method = "post" action="/postProfilePic">
   <!-- Replace "userPhoto" by real userId we have new file name : userId-Date() -->
-  <input type="file" name="userPhoto" />
-  <input type="submit" value="Upload Image" name="submit">
-  </form
+    <input type="file" name="profile_pic">
+    <input type="submit" value="Upload Image" name="submit">
+  </form>
 </body>
 </html>
