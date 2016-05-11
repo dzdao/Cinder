@@ -2,6 +2,7 @@
 var express = require("express"),
     //http = require("http"),
     bodyParser = require("body-parser"),
+    bcrypt = require("bcryptjs"),
     mongo = require("mongoose"),
     sessions = require("client-sessions"),
     multer = require("multer"),
@@ -37,7 +38,7 @@ var express = require("express"),
      callback(null, req.session.user._id + fileExtension);
    }
  });
- 
+
  // Upload function
  var upload = multer({ storage : storage}).single("profile_pic");
 
@@ -104,24 +105,24 @@ app.use(sessions({
 io.use(function(socket,next){
     // get the current username of from localStorage
     var username = socket.handshake.query.user;
-    
+
     console.log("Query: ", username);
-    
+
     // if username is in onlineUsers array, update socket in userAndSocket object
     if (onlineUsers.indexOf(username) !== -1){
         socket.name = username;
         userAndSocket[socket.name] = socket.id;
-        
+
     }
     // authorization set, will go on the io.sockets.on('connection') portion of code
     next();
-    
+
     console.log("After connection, userAndSocket object is: ")
-    console.log(userAndSocket); 
+    console.log(userAndSocket);
 })
 
 io.sockets.on('connection', function(socket){
-    
+
     console.log("Current list of active users: " + onlineUsers)
     console.log(socket.id);
 
@@ -131,28 +132,28 @@ io.sockets.on('connection', function(socket){
         onlineUsers.push(socket.username);
         console.log("After a new user logsin, updated array is ")
         console.log(onlineUsers);
-        
+
     })
-    
+
     socket.on('delete user', function(data){
-      
+
         var userToDelete = data;
-        
+
         for (var i = 0; i < onlineUsers.length; i++){
             if(onlineUsers[i] === userToDelete){
                 console.log("This user is no longer active " + onlineUsers[i]);
                 // delete user from array
                 onlineUsers.splice(i,1);
-                
+
                 //remove from userAndSocket object
                 delete userAndSocket[userToDelete];
                 console.log(userAndSocket);
             }
         }
-        
+
         console.log(onlineUsers);
     });
-    
+
     socket.on('chat', function (data) {
         var fromUser = data.userWhoSent;
         var toUser = data.userToSend;
@@ -160,12 +161,12 @@ io.sockets.on('connection', function(socket){
         console.log("send chat to: " + toUser);
         console.log("msg from user: " + fromUser);
         if (toUser in userAndSocket) {
-            
+
             // holding socketid of username that will receive message
             var userSocketId = userAndSocket[toUser];
-            
-            // send to private socket 
-            // note socket.broadcast only sends to other sockets 
+
+            // send to private socket
+            // note socket.broadcast only sends to other sockets
             // this prevents user from sending message to her/himself
             socket.broadcast.to(userSocketId).emit('get msg', {"msg": msg, "fromUser": fromUser});
         }
@@ -220,7 +221,6 @@ app.post("/postProfilePic",function(req,res){
  });
 
 // return an array of hacker buddies from user's profile to populate their homepage
-// ************************ Still working on this ****************
 app.get("/buddies", loginRequired, function(req, res) {
     Users.findOne({ username: req.session.user.username },
         function(err, user) {
@@ -277,19 +277,19 @@ app.post("/login", function(req, res) {
         username: req.body.username
     }, function(err, user) {
         if (!user) {
-            res.send("you are not registered.");
+            res.send(" this username is not registered.");
         } else {
-            if (user.password === req.body.password) {
-                console.log("Password matches");
-                console.log(user);
-                req.session.user = user;
-                res.json({ success: "logged in" });
-                //res.status("200").json({ success: "logged in." });
-                //res.redirect("/profile");
-            } else {
-                console.log("Wrong password");
-                res.send("your email or password was wrong.");
-            }
+            bcrypt.compare(req.body.password, user.password, function(err, result){
+                if (result === true) {
+                    console.log(req.body.username + " logged in successfully");
+                    req.session.user = user;
+                    res.json({success: "logged in"});
+                } else {
+                    console.log(req.body.username + " could not log in");
+                    res.send("your password was wrong.");
+                }
+
+            });
         }
     });
 });
@@ -297,33 +297,46 @@ app.post("/login", function(req, res) {
 app.post("/register", function(req, res) {
     // check to make sure both password fields match
     if (req.body.pass1 === req.body.pass2) {
-        var newUser = new Users({
-            username: req.body.username,
-            first: req.body.first,
-            last: req.body.last,
-            email: req.body.email,
-            password: req.body.pass1,
-            language: req.body.language,
-            scientist: req.body.scientist,
-            variable: req.body.variable,
-            picURL: req.body.picURL
-        });
-        // attempt to insert the new user account to mongo
-        newUser.save(function(err) {
-            if (err) {
-                console.log(err);
-                var error = "Error... Try again!";
-                if (err.code === 11000) {
-                    error = "Email or username has already registered. ";
-                }
-                res.send(error);
-            } else {
-                //req.session.user = user; ??
-                console.log("A new user was registered on the system.");
-                //res.status("200").send("User was registered.");
-                res.send("200");
-            }
-        });
+        bcrypt.genSalt(10, function(err, salt) {
+           if(err) {
+               console.log(err);
+               return err;
+           }
+
+           bcrypt.hash(req.body.pass1, salt, function(err, hash){
+               if(err){
+                   console.log(err);
+                   return err;
+               }
+               var newUser = new Users({
+                   username: req.body.username,
+                   first: req.body.first,
+                   last: req.body.last,
+                   email: req.body.email,
+                   password: hash,
+                   language: req.body.language,
+                   scientist: req.body.scientist,
+                   variable: req.body.variable
+               });
+
+               // attempt to insert the new user account to mongo
+               newUser.save(function(err) {
+                   if (err) {
+                       console.log(err);
+                       var error = "Error... Try again!";
+                       if (err.code === 11000) {
+                           error = "Email or username has already registered. ";
+                       }
+                       res.send(error);
+                   } else {
+                       //req.session.user = user; ??
+                       console.log("A new user was registered on the system.");
+                       //res.status("200").send("User was registered.");
+                       res.send("200");
+                   }
+               });
+           });
+       });
     } else {
         res.send("Make sure your passwords match. ");
     }
@@ -366,7 +379,7 @@ app.post("/addBuddy", loginRequired, function(req, res) {
             $addToSet: { hackerBuddies : newBuddy }
         },
         function(err) {
-            
+
             if (err === null) {
                 res.send("Hacker buddy was added!");
             } else {
