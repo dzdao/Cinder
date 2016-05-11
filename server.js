@@ -7,7 +7,7 @@ var express = require("express"),
     sessions = require("client-sessions"),
     multer = require("multer"),
     app = express(),
-    port = process.env.PORT || 3000,
+    port = process.env.PORT || 8000,
     mongoURL = process.env.MONGODB_URI || "mongodb://localhost/accounts",
     // for socket.io
     http = require("http").Server(app),

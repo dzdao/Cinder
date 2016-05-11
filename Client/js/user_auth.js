@@ -6,7 +6,7 @@ $(function() {
     
     var queryName = "user=" + localStorage.getItem("user");
     console.log(queryName);
-    var socket = io('localhost:3000', {query: queryName});
+    var socket = io('', {query: queryName});
      
     socket.on('user online', function(data){
         data.forEach(function(item){
