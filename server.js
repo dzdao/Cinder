@@ -5,7 +5,7 @@ var express = require("express"),
     mongo = require("mongoose"),
     sessions = require("client-sessions"),
     app = express(),
-    port = process.env.PORT || 3000,
+    port = process.env.PORT || 8000,
     mongoURL = process.env.MONGODB_URI || "mongodb://localhost/accounts";
 
 // Start listening at port 3000
