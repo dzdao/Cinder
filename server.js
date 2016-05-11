@@ -7,7 +7,12 @@ var express = require("express"),
     multer = require("multer"),
     app = express(),
     port = process.env.PORT || 8000,
-    mongoURL = process.env.MONGODB_URI || "mongodb://localhost/accounts";
+    mongoURL = process.env.MONGODB_URI || "mongodb://localhost/accounts",
+    // for socket.io
+    http = require("http").Server(app),
+    io = require("socket.io")(http),
+    userAndSocket = {}, // object that stores username to socketid value
+    onlineUsers = []; // array that stores current logged in users
 
 // Storage for uploaded photos
  var storage =   multer.diskStorage({
@@ -37,7 +42,8 @@ var express = require("express"),
  var upload = multer({ storage : storage}).single("profile_pic");
 
 // Start listening at port 3000
-app.listen(port, function() {
+// changed to HTTP instead of app because gave me problems
+http.listen(port, function() {
     console.log("Server is listening at port " + port);
 });
 
@@ -93,6 +99,80 @@ app.use(sessions({
 //     }
 //     next();
 // });
+
+/* SocketIO, Chatroom code */
+io.use(function(socket,next){
+    // get the current username of from localStorage
+    var username = socket.handshake.query.user;
+    
+    console.log("Query: ", username);
+    
+    // if username is in onlineUsers array, update socket in userAndSocket object
+    if (onlineUsers.indexOf(username) !== -1){
+        socket.name = username;
+        userAndSocket[socket.name] = socket.id;
+        
+    }
+    // authorization set, will go on the io.sockets.on('connection') portion of code
+    next();
+    
+    console.log("After connection, userAndSocket object is: ")
+    console.log(userAndSocket); 
+})
+
+io.sockets.on('connection', function(socket){
+    
+    console.log("Current list of active users: " + onlineUsers)
+    console.log(socket.id);
+
+    socket.on('new online user', function(data){
+        console.log("new online user");
+        socket.username = data;
+        onlineUsers.push(socket.username);
+        console.log("After a new user logsin, updated array is ")
+        console.log(onlineUsers);
+        
+    })
+    
+    socket.on('delete user', function(data){
+      
+        var userToDelete = data;
+        
+        for (var i = 0; i < onlineUsers.length; i++){
+            if(onlineUsers[i] === userToDelete){
+                console.log("This user is no longer active " + onlineUsers[i]);
+                // delete user from array
+                onlineUsers.splice(i,1);
+                
+                //remove from userAndSocket object
+                delete userAndSocket[userToDelete];
+                console.log(userAndSocket);
+            }
+        }
+        
+        console.log(onlineUsers);
+    });
+    
+    socket.on('chat', function (data) {
+        var fromUser = data.userWhoSent;
+        var toUser = data.userToSend;
+        var msg = data.msg;
+        console.log("send chat to: " + toUser);
+        console.log("msg from user: " + fromUser);
+        if (toUser in userAndSocket) {
+            
+            // holding socketid of username that will receive message
+            var userSocketId = userAndSocket[toUser];
+            
+            // send to private socket 
+            // note socket.broadcast only sends to other sockets 
+            // this prevents user from sending message to her/himself
+            socket.broadcast.to(userSocketId).emit('get msg', {"msg": msg, "fromUser": fromUser});
+        }
+
+    });
+
+});
 
 // checks for session info everytime user visits a page
 app.use(function(req, res, next) {

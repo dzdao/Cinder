@@ -1,5 +1,25 @@
 "use strict";
 $(function() {
+    
+    console.log(localStorage.getItem("user"));
+    var currentUser = localStorage.getItem("user");
+    
+    var queryName = "user=" + localStorage.getItem("user");
+    console.log(queryName);
+    var socket = io('localhost:3000', {query: queryName});
+     
+    socket.on('user online', function(data){
+        data.forEach(function(item){
+            console.log(item);
+            console.log(item.id + " " + item.user_name);
+        });
+    });
+    
+    socket.on('get msg',function(data){
+        console.log("getting message");
+        console.log(data.msg);
+    })
+
     // See if user is logged in. Use low-level ajax call in order to setup error handler because $.get does not allow for that.
     $.ajax({
         url: "/checklogin",
@@ -57,6 +77,12 @@ $(function() {
                 success: function(data) {
                     console.log("Successful login: " + data);
                     location.reload();
+                    //setting localStorage to keep username
+                    localStorage.setItem("user", userid);
+                    
+                    // sending userid to server of new logged in user
+                    socket.emit('new online user', userid);
+                    
                     window.location.replace("/settings.html");
                 },
                 error: function(err) {
