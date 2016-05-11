@@ -3,7 +3,7 @@ var main = function () {
     var curUser = localStorage.getItem("user")
     var queryName = "user=" + curUser;
     console.log(queryName);
-    var socket = io('localhost:3000', {query: queryName});
+    var socket = io('', {query: queryName});
     var userToSendMesssage;
     $("#userTiles").on("click", "button", function () {
         
