@@ -72,7 +72,8 @@
                         <a href="/index.html#login">Login</a>
                     </li>
                     <li class="page-scroll" id="nav-logout">
-                        <a href="/logout">Logout</a>
+                        <!--<a href="/logout">Logout</a>-->
+                        <a id="logout">Logout</a>
                     </li>
                     <li id="nav-settings">
                         <a href="/settings"><i class="fa fa-user fa-1x"></i>&nbsp;<span id="nav-userid"></span></a>
@@ -148,6 +149,47 @@
         </div>
 
     </header>
+    
+    
+    <!-- Credit to: http://codepen.io/marcobiedermann/pen/rohwn -->
+    <div id="live-chat">
+
+        <header class="clearfix">
+
+            <a href="#" class="chat-close">x</a>
+
+            <h4>John Doe</h4>
+
+            <span class="chat-message-counter">3</span>
+
+        </header>
+
+        <div class="chat">
+
+            <div class="chat-history">
+              
+
+            </div>
+            <!-- end chat-history -->
+
+            <!--<p class="chat-feedback">Your partner is typing…</p>-->
+
+            <form action="#" method="post">
+
+                <fieldset>
+
+                    <input type="text" id="chat-message" placeholder="Type your message…" autofocus></input>
+                    <button type="button" id="chat-submit">submit</button>
+
+                </fieldset>
+
+            </form>
+
+        </div>
+        <!-- end chat -->
+
+    </div>
+    <!-- end live-chat -->
 
     <!-- Footer -->
     <footer class="text-center">
@@ -202,6 +244,9 @@
             <i class="fa fa-chevron-up"></i>
         </a>
     </div>
+    
+    <!-- socket.io -->
+    <script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
 
     <!--underscore.js-->
     <script type="text/javascript" src="js/underscore-min.js"></script>

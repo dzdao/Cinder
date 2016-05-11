@@ -1,5 +1,112 @@
 var main = function () {
+    
+    var curUser = localStorage.getItem("user")
+    var queryName = "user=" + curUser;
+    console.log(queryName);
+    var socket = io('localhost:3000', {query: queryName});
+    var userToSendMesssage;
+    $("#userTiles").on("click", "button", function () {
+        
+        // button id is named buttonUSERNAME
+        // ex) holly's button is buttonHOLLY
+        // take substring of buttonid to get username of user who will receive message
+        userToSendMesssage =  $(this).attr('id').substring(6)
+        $("#live-chat").show();
+        $("#live-chat h4").text(userToSendMesssage);
+        
+    });
+    
+    
+    $("#chat-submit").on("click", function(e){
+        // prevent from submitting form
+        e.preventDefault();
+        
+        var msg = $("#chat-message").val();
+        socket.emit('chat', {msg: msg, userToSend: userToSendMesssage, userWhoSent: curUser});
+        console.log(msg);
+        
+        //Append current message the user just wrote to her/his chatbox
+        
+        var $chat_msg = $("<div>").addClass("chat-message clearfix");
+        var $img = $("<img>")//.attr({
+        //     "src": "http://gravatar.com/avatar/2c0ad52fc5943b78d6abe069cc08f320?s=32"
+        // })
+        
+        var $chat_msg_content = $("<div>").addClass("chat-message-content clearfix");
+        
+        // things to append to $chat_msg_content
+        var $chat_time = $("<span>").addClass("chat-time").text("11:11pm")
+        var $h5 = $("<h5>").text(curUser);
+        var $p = $("<p>").text(msg);
+        
+        $chat_msg_content.append($chat_time, $h5, $p);
+        
+        $chat_msg.append($img, $chat_msg_content);
+        $(".chat-history").append($chat_msg, $("<hr>"));
+        
+        // end of generateing message to chatbox
+   
+        $("#chat-message").val('')
+    });
+    
 
+    
+    // logging user out
+    $("#logout").on("click", function () {
+        console.log("take user out of online users");
+
+        $.get("/logout", function () {
+
+            console.log("deleting user : " + curUser)
+            socket.emit('delete user', curUser);
+
+            // remove user from localStorage
+            localStorage.removeItem("user");
+
+            window.location.href = "index.html"
+        });
+    });
+    // when someone sends message to user
+    socket.on('get msg',function(data){
+        console.log("getting message");
+        console.log(data);
+        
+        var fromUser = data.fromUser;
+        var msg = data.msg;
+        
+         // Change heading of chat box to user who sent message
+         $("#live-chat h4").text(fromUser);
+         
+         // TO FIX BUG BUT WILL PROBABLY NEED TO FIGURE OUT A BETTER WAY TO DO THIS
+         userToSendMesssage = fromUser
+        
+        //Generating chatbox content
+        //Append msg to chatbox
+        
+        var $chat_msg = $("<div>").addClass("chat-message clearfix");
+        var $img = $("<img>")//.attr({
+        //     "src": "http://lorempixum.com/32/32/people"
+        // })
+        
+        var $chat_msg_content = $("<div>").addClass("chat-message-content clearfix");
+        
+        // things to append to $chat_msg_content
+        var $chat_time = $("<span>").addClass("chat-time").text("11:11pm")
+        var $h5 = $("<h5>").text(fromUser);
+        var $p = $("<p>").text(msg);
+        
+        $chat_msg_content.append($chat_time, $h5, $p);
+        
+        $chat_msg.append($img, $chat_msg_content);
+        $(".chat-history").append($chat_msg, $("<hr>"));
+        
+        // end of generateing message to chatbox
+   
+        //need to generate message box to popup
+        $("#live-chat").show();
+        
+    })
+    // retrieving user's buddy list and displaying as tiles
     $.get("/buddies", function (users) {
         
         var getUser = [];
@@ -43,7 +150,8 @@ var main = function () {
             var $button = $("<button>").attr({
                 "type": "button",
                 "class": "btn btn-default",
-                "data-dismiss": "modal"
+                "data-dismiss": "modal",
+                "id": "button" + user.username
             })
             $button.text("Chat with me!");
             $chat_button.append($button);
@@ -157,5 +265,22 @@ var main = function () {
 
 $(document).ready(function() {
     main();
+    
+    $("#live-chat").hide();
+    // CHATBOX JAVASCRIPT credit to 
+    $('#live-chat header').on('click', function () {
+
+        $('.chat').slideToggle(300, 'swing');
+        //$('.chat-message-counter').fadeToggle(300, 'swing');
+
+    });
+
+    $('.chat-close').on('click', function (e) {
+
+        e.preventDefault();
+        $('#live-chat').fadeOut(300);
+
+    });
+  
 });
 
