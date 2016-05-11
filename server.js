@@ -316,7 +316,8 @@ app.post("/register", function(req, res) {
                    password: hash,
                    language: req.body.language,
                    scientist: req.body.scientist,
-                   variable: req.body.variable
+                   variable: req.body.variable,
+                   picURL: req.body.picURL
                });
 
                // attempt to insert the new user account to mongo
