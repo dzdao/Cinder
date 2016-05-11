@@ -8,7 +8,7 @@ var express = require("express"),
     multer = require("multer"),
     app = express(),
     port = process.env.PORT || 8000,
-    mongoURL = process.env.MONGODB_URI || "mongodb://localhost/accounts",
+    mongoURL = process.env.MONGODB_URI || JSON.parse(process.env.VCAP_SERVICES).mongolab[0].credentials.uri || "mongodb://localhost/accounts",
     // for socket.io
     http = require("http").Server(app),
     io = require("socket.io")(http),
