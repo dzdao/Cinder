@@ -1,3 +1,4 @@
 **/.DS_Store
 /node_modules
-/Client/img/profile_pic
+/Client/img/profile_pic/*
+!/Client/img/profile_pic/*.txt
