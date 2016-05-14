@@ -11,6 +11,7 @@ $(function() {
             $("#nav-login").hide();
             $("#signup").hide();
             $("#login").hide();
+            $("#nav-userid").text(data);
 
             console.log(data);
         },
@@ -20,6 +21,8 @@ $(function() {
                 // user is NOT logged in
                 $("#nav-logout").hide();
                 $("#nav-match").hide();
+                $("#nav-profile").hide();
+                $("#nav-settings").hide();
             }
             else {
                 console.log(err);

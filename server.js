@@ -5,7 +5,12 @@ var express = require("express"),
     mongo = require("mongoose"),
     sessions = require("client-sessions"),
     app = express(),
-    port = process.env.PORT || 3000;
+    port = process.env.PORT || 3000,
+    mongoURL = process.env.MONGODB_URI || "mongodb://localhost/accounts";
+
+var fs = require("fs"),
+    db;
+
 
 // Start listening at port 3000
 app.listen(port, function() {
@@ -13,7 +18,7 @@ app.listen(port, function() {
 });
 
 // connect to mongoDB
-mongo.connect("mongodb://localhost/accounts");
+mongo.connect(mongoURL);
 
 var userSchema = mongo.Schema({
     username: String,
@@ -67,10 +72,18 @@ app.use(sessions({
 
 
 /* ROUTES are defined below */
+app.get("/db.json", function(req, res){
+    console.log("Server working");
+    fs.readFile("db.json", "utf8", function (err, data) {
+        db = JSON.parse(data);
+    });
+
+    res.send(db.users);
+});
 
 app.get("/checklogin", function(req, res) {
     if (req.session && req.session.user) {
-        res.send(req.session.user.email);
+        res.send(req.session.user.username);
     } else {
         res.status("401").send({
             error: "Unauthorized. Please login first"
@@ -208,5 +221,32 @@ app.get("/customData", function(req, res) {
         res.status("401").send({
             error: "Unauthorized. Please login first"
         });
+    }
+});
+
+// Routing for a match page
+app.get("/matchUsers", function(req, res) {
+    if (req.session && req.session.user) {
+        // Find users who has at least one same atrribute
+        Users.find( {
+            $and : [
+                { _id: { $ne: req.session.user._id } },
+                { $or:
+                    [
+                        { language: req.session.user.language },
+                        { scientist: req.session.user.scientist },
+                        { variable: req.session.user.variable }
+                    ]
+                }
+            ]
+        }, function(err, user) {
+            if (err) {
+                res.send("error");
+            } else {
+                res.json(user);
+            }
+        });
+    } else {
+        res.status("401").send("Unauthorized. Please login first");
     }
 });
