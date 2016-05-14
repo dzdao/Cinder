@@ -25,7 +25,7 @@
     <link rel="stylesheet" type="text/css" href="css/profile.css">
 
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    
+
     <!--Tab Icon-->
     <link rel="icon" href="img/favicon.png">
 
@@ -54,29 +54,29 @@
                         <a href="#page-top"></a>
                     </li>
                     <li class="page-scroll" id="nav-match">
-                        <a href="match.html">Let Us Chill</a>
+                        <a href="/match">Let Us Chill</a>
                     </li>
                     <!--<li class="page-scroll">
                         <a href="#portfolio">Portfolio</a>
                     </li>-->
                     <li class="page-scroll" id="nav-profile">
-                        <a href="profile.html">Profile</a>
+                        <a href="/profile">Profile</a>
                     </li>
                     <!--<li class="page-scroll">
                         <a href="#about">About</a>
                     </li>-->
                     <li class="page-scroll" id="nav-signup">
-                        <a href="index.html#signup">Signup</a>
-                    </li>
+                        <a href="/index.html#signup">Signup</a>
                     </li>
                     <li class="page-scroll" id="nav-login">
-                        <a href="index.html#login">Login</a>
+                        <a href="/index.html#login">Login</a>
                     </li>
                     <li class="page-scroll" id="nav-logout">
-                        <a href="/logout">Logout</a>
+                        <!--<a href="/logout">Logout</a>-->
+                        <a id="logout">Logout</a>
                     </li>
                     <li id="nav-settings">
-                        <a href="/settings"><i class="fa fa-user fa-2x"></i>&nbsp;<span id="nav-userid"></span></a>
+                        <a href="/settings"><i class="fa fa-user fa-1x"></i>&nbsp;<span id="nav-userid"></span></a>
                     </li>
                 </ul>
             </div>
@@ -92,10 +92,10 @@
         <div class="row main" id="userTiles">
             <!-- profile.js will generate profile tiles and modals -->
             <!-- START TILE -->
-            <div class="col-md-3">
-                <div class="span3 well">
+            <!--<div class="col-md-3">-->
+                <!--<div class="span3 well">
                     <div class="tile">
-                        <!-- data-target binds the tile to the modal that will pop-up when the tile is clicked -->
+
                         <a href="#aboutModal" data-toggle="modal" data-target="#myModal1"><img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R"
                                 name="aboutme" width="140" height="140" class="img-circle"></a>
                         <h3>Username</h3>
@@ -106,9 +106,9 @@
                         </div>
                         <em>click my face for more</em>
                     </center>
-                </div>
+                </div>-->
                 <!-- Modal -->
-                <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <!--<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -141,14 +141,55 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
                 <!-- END MODAL -->
-            </div>
+            <!--</div>-->
             <!-- END TILE -->
         </div>
         </div>
 
     </header>
+
+
+    <!-- Credit to: http://codepen.io/marcobiedermann/pen/rohwn -->
+    <div id="live-chat">
+
+        <header class="clearfix">
+
+            <a href="#" class="chat-close">x</a>
+
+            <h4>John Doe</h4>
+
+            <span class="chat-message-counter">3</span>
+
+        </header>
+
+        <div class="chat">
+
+            <div class="chat-history">
+
+
+            </div>
+            <!-- end chat-history -->
+
+            <!--<p class="chat-feedback">Your partner is typing…</p>-->
+
+            <form>
+
+                <fieldset>
+
+                    <input type="text" id="chat-message" placeholder="Type your message…" autofocus></input>
+                    <button type="button" id="chat-submit">Send</button>
+
+                </fieldset>
+
+            </form>
+
+        </div>
+        <!-- end chat -->
+
+    </div>
+    <!-- end live-chat -->
 
     <!-- Footer -->
     <footer class="text-center">
@@ -160,28 +201,8 @@
                         <p>3481 Melrose Place<br>Beverly Hills, CA 90210</p>
                     </div>
                     <div class="footer-col col-md-4">
-                        <h3>Around the Web</h3>
-                        <ul class="list-inline">
-                            <li>
-                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a>
-                            </li>
-                            <li>
-                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-google-plus"></i></a>
-                            </li>
-                            <li>
-                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a>
-                            </li>
-                            <li>
-                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-linkedin"></i></a>
-                            </li>
-                            <li>
-                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-dribbble"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="footer-col col-md-4">
-                        <h3>About Freelancer</h3>
-                        <p>Freelance is a free to use, open source Bootstrap theme created by <a href="http://startbootstrap.com">Start Bootstrap</a>.</p>
+                        <h3>About Cinder</h3>
+                        <p>Cinder is an open environment for programmers to interact and hopefully create something cool together.</p>
                     </div>
                 </div>
             </div>
@@ -203,6 +224,9 @@
             <i class="fa fa-chevron-up"></i>
         </a>
     </div>
+
+    <!-- socket.io -->
+    <script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
 
     <!--underscore.js-->
     <script type="text/javascript" src="js/underscore-min.js"></script>
@@ -227,6 +251,9 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="js/freelancer.js"></script>
+
+    <!--Knockout lib-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
 
     <!-- transform2d lib -->
     <script type="text/javascript" src="js/jquery.transform2d.js"></script>

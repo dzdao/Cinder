@@ -1,0 +1,11 @@
+---
+applications:
+- name: cinder
+  memory: 256M
+  command: node server.js
+  disk_quota: 1024M
+  host: cinder
+  domain: cfapps.io
+  instances: 1
+  services:
+  - mongodb_service

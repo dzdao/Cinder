@@ -4,7 +4,7 @@ var jTinder = function () {
     var likedList = [];
     var dislikedList = [];
     var currentIndex = -1;
-    
+
     var $tinderSlideDiv = $("#tinderslide");
 
     var likedEffects = [
@@ -52,25 +52,36 @@ var jTinder = function () {
             soundFile: "angry-face.mp3"
         }
     ];
-    
+
     var showResult = function () {
         $tinderSlideDiv.delay(800).hide( function () {
             var $container = $(".wrap");
-            
+
             if(likedList.length === 0) {
-                noMatchPrompt("We ran out of your matches. :(");
+                noMatchPrompt(false, "We ran out of your matches.");
             } else {
                 $container.append($("<h4>").text("You liked:"));
-                
+
                 likedList.forEach(function (name) {
                     $container.append($("<p>").text(name)).slideDown();
                 });
             }
+
+            setTimeout(function () {
+                $("span h3").remove();
+                $container.fadeOut().empty();
+                $container.append($("<h3>").text("Redirecting to a profile page...")).fadeIn(300);
+            }, 7000);
+
+            setTimeout(function () {
+                location.reload();
+                window.location.replace("/profile.html");
+            }, 11000);
         });
     }
 
     var flickResponse = function (effect) {
-            $('#status').html(effect.emoji).show().delay(500).fadeOut();
+            $('#status').html(effect.emoji).show();
             audio = new Audio("../sounds/" + effect.soundFile);
             audio.play();
     };
@@ -96,8 +107,21 @@ var jTinder = function () {
         // like callback
         onLike: function (item) {
             currentIndex = item.index();
-            likedList.push($(".fade:nth-child(" + (currentIndex + 1) + ") h4").text());
-            
+            var username = $(".fade:nth-child(" + (currentIndex + 1) + ") h4").text();
+            likedList.push(username);
+            $.ajax({
+                url: "/addBuddy",
+                type: "POST",
+                dataType: "json",
+                data: { username: username },
+                success: function (res) {
+                    console.log(res.responseText);
+                },
+                error: function (res) {
+                    console.log(res.responseText);
+                }
+            });
+
             // set the status text
             var effect = _.sample(likedEffects, 1)[0];
 
@@ -107,7 +131,7 @@ var jTinder = function () {
 
             flickResponse(effect);
             lastEffect = effect;
-            
+
             if (currentIndex === 0) {
                 showResult();
             }
@@ -118,78 +142,11 @@ var jTinder = function () {
     });
 }
 
-// var main = function () {
-//     "use strict";
-//     /**
-//      * jTinder initialization
-//      */
-    
-//     var $tinderSlideDiv = $("#tinderslide");
-    
-//     // Populate a match page
-//     $tinderSlideDiv.hide();
-    
-//     var $icon = $("<i>").attr( { class: "fa fa-refresh fa-spin fa-3x fa-fw margin-bottom" } );
-//     var $p = $("<p>").text("Matching...");
-    
-//     var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $p);
-//     $(".wrap").append($span);
-    
-//     $.get("/matchUsers", function (data) {
-//         if(data.length === 0) {
-//             console.log("No match");
-//         }
-//         else {
-//             var count = 1;
-//             data.forEach(function (user) {
-                
-//                 // Creat new user tile
-//                 var $userProfileImg = $("<img>").attr({
-//                     src: "../img/portfolio/formal guy.png",
-//                     name: "aboutme",
-//                     width: "235",
-//                     height: "235",
-//                     class: "img-thumbnail"});
-                    
-//                 var $userNameH3 = $("<h3>").text(user.first + " " +user.last);
-                
-//                 var $newTileDiv = $("<div>").addClass("tile").append($userProfileImg, $userNameH3);
-
-//                 var $buttonA = $("<a>").attr({
-//                     href: "#aboutModal",
-//                     "data-toggle": "modal",
-//                     "data-target": "#myModal" + count,
-//                 }).append($("<button>").attr({
-//                     class: "btn btn-default",
-//                     "data-dismiss": "modal"
-//                 }).text("Hack me out!"));
-                
-//                 var $buttonDiv = $("<div>").addClass("chat-button").append($buttonA);
-                
-//                 var $newCardLi = $("<li>").addClass("pane").append($("<div>").addClass("span3 well").append($newTileDiv, $buttonDiv));
-//                 var $swipeCardUl = $("#tinderslide ul").append($newCardLi);
-//             });
-            
-//             count++;
-//         }
-//     }).done( function () {
-//         setTimeout(function () {
-//             $(".wrap span i, .wrap span p").fadeOut(function () {
-//                 $(".wrap span i, .wrap span p, .wrap span br").remove();
-//                 $tinderSlideDiv.slideDown();
-//                 jTinder();
-//             });
-//         }, 2000);
-//     } );
-// }
-
-// $(document).ready(main);
-
-var noMatchPrompt = function (msg) {
+var noMatchPrompt = function (showHeart, msg) {
     var powerfulQuotes = [
-        { 
+        {
             first: "“And suddenly you just know … ",
-            second: "it’s time to start something new and trust the magic of beginnings.” -Meister Eckhart"
+            second: "it’s time to start something new and trust the magic of beginnings.” - Meister Eckhart"
         },
         {
             first: "“It might take a year. It might take a day.",
@@ -197,66 +154,65 @@ var noMatchPrompt = function (msg) {
         },
         {
             first: "“We are sometimes taken into troubled waters",
-            second: "not be drowned but to be cleansed.” - Unkown"
+            second: "not be drowned but to be cleansed.” - Unknown"
         },
         {
             first: "“Difficult roads",
-            second: "often lead to beautiful destinations.” - Unkown"
+            second: "often lead to beautiful destinations.” - Unknown"
         },
         {
             first: "“Faith and fear both demand you believe",
             second: "in something you cannot see. You choose.” – Bob Proctor"
         }
     ];
-    
-    var $icon = $("<i>").attr( { class: "fa fa-heart fa-5x fa-fw margin-bottom", "aria-hidden":"true" } );
+
+    var $icon;
+    if(showHeart) {
+        $icon = $("<i>").attr( { class: "fa fa-heart-o fa-5x fa-fw margin-bottom", "aria-hidden":"true" } );
+    }
+
     $("span h3").remove();
     var $h3 = $("<h3>").text(msg);
     var quote = _.sample(powerfulQuotes);
     var $p2 = $("<p>").text(quote.first);
     var $p3 = $("<p>").text(quote.second);
-    
-    var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $h3, $p2, $p3).fadeIn();
+
+    var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $h3, $p2, $p3).fadeIn(300);;
     $(".wrap").append($span);
 }
 
 function appViewModel () {
     var $tinderSlideDiv = $("#tinderslide");
-    
+
     // Populate a match page
     $tinderSlideDiv.hide();
-    
-    var $icon = $("<i>").attr( { class: "fa fa-refresh fa-spin fa-3x fa-fw margin-bottom" } );
-    var $p = $("<p>").text("Matching...");
-    
-    var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $p);
-    $(".wrap").append($span);
+
     var self = this;
     self.users = ko.observableArray([]);
-    
+
     var incrementCount = function () {
-        
+
     }
-        
+
     $.ajax({
         url: "/matchUsers",
-        type: "GET", 
+        type: "GET",
         dataType: "json",
         success: function (data) {
             if(data.length === 0) {
                 setTimeout(function () {
                     $(".wrap span i, .wrap span p").fadeOut(function () {
                         $(".wrap span i, .wrap span p, .wrap span br").remove();
-                            noMatchPrompt("Cannnot find your match");
+                            noMatchPrompt(true, "Cannot find your match");
                     });
                 }, 2000);
             }
             else {
                 self.users(data);
+                $tinderSlideDiv.removeClass("hidden");
                 setTimeout(function () {
                     $(".wrap span i, .wrap span p").fadeOut(function () {
                         $(".wrap span i, .wrap span p, .wrap span br").remove();
-
                         $tinderSlideDiv.slideDown();
                         jTinder();
                     });
@@ -264,10 +220,10 @@ function appViewModel () {
             }
         },
         error: function (error){
-            // $(".wrap span p").text(error.responseText).fadeIn();
+            $(".wrap span p").text(error.responseText).fadeIn();
         }
     });
-    
+
 }
 
 ko.applyBindings( new appViewModel() );
