@@ -1,3 +1,5 @@
+// Server-side code
+/* jshint node: true, curly: true, eqeqeq: true, forin: true, immed: true, indent: 4, latedef: true, newcap: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, trailing: true */
 "use strict";
 var express = require("express"),
     //http = require("http"),
@@ -20,47 +22,22 @@ if (process.env.VCAP_SERVICES) {
     mongoURL = JSON.parse(process.env.VCAP_SERVICES).mongolab[0].credentials.uri;
 }
 
-// Storage for uploaded photos
- var storage =   multer.diskStorage({
-   destination: function (req, file, callback) {
-     callback(null, "./Client/img/profile_pic");
-   },
-    //  Replace Date() by real userId we have new file name with format: userPhoto-userId
-   filename: function (req, file, callback) {
-     var indexAnExtensionBegins = file.originalname.indexOf(".");
-     var fileExtension = file.originalname.substr(indexAnExtensionBegins, file.originalname.length - indexAnExtensionBegins);
-        Users.update({ username: req.session.user.username },
-            {
-                $set: {
-                    picURL: "img/profile_pic/" + req.session.user._id + fileExtension
-                }
-            }, function (err) {
-               if (err !== null) {
-                   console.log("Cannot update a profile picture");
-               }
-            }
-        );
-     callback(null, req.session.user._id + fileExtension);
-   }
- });
-
- // Upload function
- var upload = multer({ storage : storage}).single("profile_pic");
-
-// Start listening at port 3000
-// changed to HTTP instead of app because gave me problems
-http.listen(port, function() {
-    console.log("Server is listening at port " + port);
-});
-
 // connect to mongoDB
 mongo.connect(mongoURL);
 
 var userSchema = mongo.Schema({
-    username: { type: String, unique: true }, // 1 unique username per account
+    // 1 unique username per account
+    username: {
+        type: String,
+        unique: true
+    },
     first: String,
     last: String,
-    email: { type: String, unique: true },    // 1 unique email per account
+    // 1 unique email per account
+    email: {
+        type: String,
+        unique: true
+    },
     password: String,
     hackerBuddies: [String],
     language: String,
@@ -71,6 +48,41 @@ var userSchema = mongo.Schema({
 
 // access the collection table called Users
 var Users = mongo.model("Users", userSchema);
+
+// Storage for uploaded photos
+var storage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, "./Client/img/profile_pic");
+    },
+    //  Replace Date() by real userId we have new file name with format: userPhoto-userId
+    filename: function(req, file, callback) {
+        var indexAnExtensionBegins = file.originalname.indexOf(".");
+        var fileExtension = file.originalname.substr(indexAnExtensionBegins, file.originalname.length - indexAnExtensionBegins);
+        Users.update({
+            username: req.session.user.username
+        }, {
+            $set: {
+                picURL: "img/profile_pic/" + req.session.user._id + fileExtension
+            }
+        }, function(err) {
+            if (err !== null) {
+                console.log("Cannot update a profile picture");
+            }
+        });
+        callback(null, req.session.user._id + fileExtension);
+    }
+});
+
+// Upload function
+var upload = multer({
+    storage: storage
+}).single("profile_pic");
+
+// Start listening at port 3000
+// changed to HTTP instead of app because gave me problems
+http.listen(port, function() {
+    console.log("Server is listening at port " + port);
+});
 
 // Set static route to html files.
 app.use(express.static(__dirname + "/Client"));
@@ -90,31 +102,17 @@ app.use(sessions({
     // If expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
     // to prevent the user from being logged out while they are using the site.
     activeDuration: 5 * 60 * 1000
-
-    // add the below options for a more secure configuration
-    //     httpOnly: true,  // prevents browser JavaScript from accessing cookies
-    //     secure: true,    // ensures cookies are only used over https
-    //     emphemeral: true // deletes the cookie when browser is closed
 }));
 
-// restrict user from trying to access static html pages?
-// app.use(function(req, res, next) {
-//     if ((req.path.indexOf("html") >= 0)){
-//         console.log("User trying to visit static html page");
-//         res.redirect("/login");
-//     }
-//     next();
-// });
-
 /* SocketIO, Chatroom code */
-io.use(function(socket,next){
+io.use(function(socket, next) {
     // get the current username of from localStorage
     var username = socket.handshake.query.user;
 
     console.log("Query: ", username);
 
     // if username is in onlineUsers array, update socket in userAndSocket object
-    if (onlineUsers.indexOf(username) !== -1){
+    if (onlineUsers.indexOf(username) !== -1) {
         socket.name = username;
         userAndSocket[socket.name] = socket.id;
 
@@ -122,33 +120,33 @@ io.use(function(socket,next){
     // authorization set, will go on the io.sockets.on('connection') portion of code
     next();
 
-    console.log("After connection, userAndSocket object is: ")
+    console.log("After connection, userAndSocket object is: ");
     console.log(userAndSocket);
-})
+});
 
-io.sockets.on('connection', function(socket){
+io.sockets.on("connection", function(socket) {
 
-    console.log("Current list of active users: " + onlineUsers)
+    console.log("Current list of active users: " + onlineUsers);
     console.log(socket.id);
 
-    socket.on('new online user', function(data){
+    socket.on("new online user", function(data) {
         console.log("new online user");
         socket.username = data;
         onlineUsers.push(socket.username);
-        console.log("After a new user logsin, updated array is ")
+        console.log("After a new user logsin, updated array is ");
         console.log(onlineUsers);
 
-    })
+    });
 
-    socket.on('delete user', function(data){
+    socket.on("delete user", function(data) {
 
         var userToDelete = data;
 
-        for (var i = 0; i < onlineUsers.length; i++){
-            if(onlineUsers[i] === userToDelete){
+        for (var i = 0; i < onlineUsers.length; i++) {
+            if (onlineUsers[i] === userToDelete) {
                 console.log("This user is no longer active " + onlineUsers[i]);
                 // delete user from array
-                onlineUsers.splice(i,1);
+                onlineUsers.splice(i, 1);
 
                 //remove from userAndSocket object
                 delete userAndSocket[userToDelete];
@@ -159,7 +157,7 @@ io.sockets.on('connection', function(socket){
         console.log(onlineUsers);
     });
 
-    socket.on('chat', function (data) {
+    socket.on("chat", function(data) {
         var fromUser = data.userWhoSent;
         var toUser = data.userToSend;
         var msg = data.msg;
@@ -173,7 +171,10 @@ io.sockets.on('connection', function(socket){
             // send to private socket
             // note socket.broadcast only sends to other sockets
             // this prevents user from sending message to her/himself
-            socket.broadcast.to(userSocketId).emit('get msg', {"msg": msg, "fromUser": fromUser});
+            socket.broadcast.to(userSocketId).emit("get msg", {
+                "msg": msg,
+                "fromUser": fromUser
+            });
         }
 
     });
@@ -183,13 +184,15 @@ io.sockets.on('connection', function(socket){
 // checks for session info everytime user visits a page
 app.use(function(req, res, next) {
     if (req.session && req.session.user) {
-        Users.findOne({ email: req.session.user.email}, function(err, user) {
-            if(user){
+        Users.findOne({
+            email: req.session.user.email
+        }, function(err, user) {
+            if (user) {
                 req.user = user;
                 delete req.user.password;
-                req.session.user = req.user;    // refresh the session
+                req.session.user = req.user; // refresh the session
             }
-        next();
+            next();
         });
     } else {
         next();
@@ -197,7 +200,7 @@ app.use(function(req, res, next) {
 });
 
 function loginRequired(req, res, next) {
-    if(!req.user){
+    if (!req.user) {
         console.log("User must be logged in to access this page");
         res.redirect("/index.html#login");
     } else {
@@ -207,47 +210,59 @@ function loginRequired(req, res, next) {
 
 /* ROUTES are defined below */
 
-app.get("/userSession", function (req, res) {
+app.get("/userSession", function(req, res) {
     res.json(req.session.user);
 });
 
 // Route for uploading a profile picture
-app.post("/postProfilePic",function(req,res){
-     upload(req, res, function(err) {
-         if(err) {
-           console.log("Error uploading file.");
-           res.redirect("settings.html")
-         }
-         else {
+app.post("/postProfilePic", function(req, res) {
+    upload(req, res, function(err) {
+        if (err) {
+            console.log("Error uploading file.");
+            res.redirect("settings.html");
+        } else {
             console.log("File is uploaded");
-            res.redirect("settings.html")
-         }
-     });
- });
+            res.redirect("settings.html");
+        }
+    });
+});
 
 // return an array of hacker buddies from user's profile to populate their homepage
 app.get("/buddies", loginRequired, function(req, res) {
-    Users.findOne({ username: req.session.user.username },
+    Users.findOne({
+            username: req.session.user.username
+        },
         function(err, user) {
             if (err) {
                 res.send("Error. " + err);
             } else {
-                Users.find({ username: { $in: user.hackerBuddies } }, function (err, data) {
+                Users.find({
+                    username: {
+                        $in: user.hackerBuddies
+                    }
+                }, function(err, data) {
                     res.send(data);
                 });
             }
-    });
+        });
 });
 
 app.delete("/buddies", loginRequired, function(req, res) {
-    Users.update({ username: req.session.user.username },
-        { $pull: { hackerBuddies: req.body.buddy } },
+    Users.update({
+            username: req.session.user.username
+        }, {
+            $pull: {
+                hackerBuddies: req.body.buddy
+            }
+        },
         function(err, user) {
             if (err) {
                 res.send("error: cannot remove " + req.body.buddy);
             } else {
                 console.log("User removed " + req.body.buddy);
-                res.json( { status: "Successfully reomoved " + req.body.buddy } );
+                res.json({
+                    status: "Successfully reomoved " + req.body.buddy
+                });
             }
         }
     );
@@ -257,7 +272,9 @@ app.get("/checklogin", function(req, res) {
     if (req.session && req.session.user) {
         res.status("200").send(req.session.user.username);
     } else {
-        res.status("401").send({ error: "Unauthorized. Please login first" });
+        res.status("401").send({
+            error: "Unauthorized. Please login first"
+        });
     }
 });
 
@@ -284,11 +301,13 @@ app.post("/login", function(req, res) {
         if (!user) {
             res.send(" this username is not registered.");
         } else {
-            bcrypt.compare(req.body.password, user.password, function(err, result){
+            bcrypt.compare(req.body.password, user.password, function(err, result) {
                 if (result === true) {
                     console.log(req.body.username + " logged in successfully");
                     req.session.user = user;
-                    res.json({success: "logged in"});
+                    res.json({
+                        success: "logged in"
+                    });
                 } else {
                     console.log(req.body.username + " could not log in");
                     res.send("your password was wrong.");
@@ -303,46 +322,46 @@ app.post("/register", function(req, res) {
     // check to make sure both password fields match
     if (req.body.pass1 === req.body.pass2) {
         bcrypt.genSalt(10, function(err, salt) {
-           if(err) {
-               console.log(err);
-               return err;
-           }
+            if (err) {
+                console.log(err);
+                return err;
+            }
 
-           bcrypt.hash(req.body.pass1, salt, function(err, hash){
-               if(err){
-                   console.log(err);
-                   return err;
-               }
-               var newUser = new Users({
-                   username: req.body.username,
-                   first: req.body.first,
-                   last: req.body.last,
-                   email: req.body.email,
-                   password: hash,
-                   language: req.body.language,
-                   scientist: req.body.scientist,
-                   variable: req.body.variable,
-                   picURL: req.body.picURL
-               });
+            bcrypt.hash(req.body.pass1, salt, function(err, hash) {
+                if (err) {
+                    console.log(err);
+                    return err;
+                }
+                var newUser = new Users({
+                    username: req.body.username,
+                    first: req.body.first,
+                    last: req.body.last,
+                    email: req.body.email,
+                    password: hash,
+                    language: req.body.language,
+                    scientist: req.body.scientist,
+                    variable: req.body.variable,
+                    picURL: req.body.picURL
+                });
 
-               // attempt to insert the new user account to mongo
-               newUser.save(function(err) {
-                   if (err) {
-                       console.log(err);
-                       var error = "Error... Try again!";
-                       if (err.code === 11000) {
-                           error = "Email or username has already registered. ";
-                       }
-                       res.send(error);
-                   } else {
-                       //req.session.user = user; ??
-                       console.log("A new user was registered on the system.");
-                       //res.status("200").send("User was registered.");
-                       res.send("200");
-                   }
-               });
-           });
-       });
+                // attempt to insert the new user account to mongo
+                newUser.save(function(err) {
+                    if (err) {
+                        console.log(err);
+                        var error = "Error... Try again!";
+                        if (err.code === 11000) {
+                            error = "Email or username has already registered. ";
+                        }
+                        res.send(error);
+                    } else {
+                        //req.session.user = user; ??
+                        console.log("A new user was registered on the system.");
+                        //res.status("200").send("User was registered.");
+                        res.send("200");
+                    }
+                });
+            });
+        });
     } else {
         res.send("Make sure your passwords match. ");
     }
@@ -352,8 +371,9 @@ app.post("/register", function(req, res) {
 app.post("/updateProfile", loginRequired, function(req, res) {
     console.log("User is updating profile");
 
-    Users.update({ email: req.session.user.email },
-        {
+    Users.update({
+            email: req.session.user.email
+        }, {
             $set: {
                 username: req.body.username,
                 first: req.body.first,
@@ -368,7 +388,9 @@ app.post("/updateProfile", loginRequired, function(req, res) {
         function(err) {
             if (err === null) {
                 // Return json to trigger success function in $.ajax
-                res.json({ status:"Profile updated." });
+                res.json({
+                    status: "Profile updated."
+                });
             } else {
                 res.send("Updating database failed.");
             }
@@ -380,9 +402,12 @@ app.post("/addBuddy", loginRequired, function(req, res) {
     var newBuddy = req.body.username;
     console.log("User is adding a new hacker buddy! " + newBuddy);
 
-    Users.update({ email: req.session.user.email },
-        {
-            $addToSet: { hackerBuddies : newBuddy }
+    Users.update({
+            email: req.session.user.email
+        }, {
+            $addToSet: {
+                hackerBuddies: newBuddy
+            }
         },
         function(err) {
 
@@ -400,47 +425,24 @@ app.get("/logout", function(req, res) {
     res.redirect("/");
 });
 
-// returns user attributes
-app.get("/customData", loginRequired, function(req, res) {
-    Users.findOne({ email: req.session.user.email }, function(err, user) {
-        if (err) {
-            res.json({ error: err });
-        } else {
-            // returns the following
-            // var data = {
-            //     username: String,
-            //     first: String,
-            //     last: String,
-            //     email : String,
-            //     language : String,
-            //     scientist : String,
-            //     variable : String
-            // }
-
-            var data = user;
-            delete data.password; // remove the user password from object
-            delete data.hackerBuddies;
-            console.log(data);
-            res.json(data);
-        }
-    });
-});
-
 // Routing for a match page
 app.get("/matchUsers", function(req, res) {
     if (req.session && req.session.user) {
         // Find users who has at least one same atrribute
-        Users.find( {
-            $and : [
-                { _id: { $ne: req.session.user._id } },
-                { $or:
-                    [
-                        { language: req.session.user.language },
-                        { scientist: req.session.user.scientist },
-                        { variable: req.session.user.variable }
-                    ]
+        Users.find({
+            $and: [{
+                _id: {
+                    $ne: req.session.user._id
                 }
-            ]
+            }, {
+                $or: [{
+                    language: req.session.user.language
+                }, {
+                    scientist: req.session.user.scientist
+                }, {
+                    variable: req.session.user.variable
+                }]
+            }]
         }, function(err, user) {
             if (err) {
                 res.send("error");
