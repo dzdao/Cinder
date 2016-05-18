@@ -92,6 +92,7 @@ $(document).ready(function() {
 
     $.ajax({
         url: "/userSession",
+        type: "GET",
         dataType: "json",
         success: function(data) {
             console.log("get data");

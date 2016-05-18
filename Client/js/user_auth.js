@@ -123,7 +123,7 @@ $(function() {
             var lang = $("select#language").val();
             var sci = $("select#scientist").val();
             var varType = $("select#variable").val();
-            var profilePicURL = "img/portfolio/formal lady.png";
+            var profilePicURL = "img/profile_pic/formal_girl.png";
 
             // Check for white space in name for Success/Fail message
             if (firstName.indexOf(" ") >= 0) {

@@ -2,17 +2,15 @@
 /* jshint node: true, curly: true, eqeqeq: true, forin: true, immed: true, indent: 4, latedef: true, newcap: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, trailing: true */
 "use strict";
 var express = require("express"),
-    //http = require("http"),
     bodyParser = require("body-parser"),
     bcrypt = require("bcryptjs"),
     mongo = require("mongoose"),
     sessions = require("client-sessions"),
     multer = require("multer"),
     app = express(),
-    port = process.env.PORT || 8000,
-    mongoURL = process.env.MONGODB_URI || "mongodb://localhost/accounts",
-    // for socket.io
-    http = require("http").Server(app),
+    port = process.env.PORT || 8000, // Use Cloud Foundry port if it is available
+    mongoURL = "mongodb://localhost/accounts",
+    http = require("http").Server(app), // for socket.io
     io = require("socket.io")(http),
     userAndSocket = {}, // object that stores username to socketid value
     onlineUsers = []; // array that stores current logged in users
@@ -54,7 +52,6 @@ var storage = multer.diskStorage({
     destination: function(req, file, callback) {
         callback(null, "./Client/img/profile_pic");
     },
-    //  Replace Date() by real userId we have new file name with format: userPhoto-userId
     filename: function(req, file, callback) {
         var indexAnExtensionBegins = file.originalname.indexOf(".");
         var fileExtension = file.originalname.substr(indexAnExtensionBegins, file.originalname.length - indexAnExtensionBegins);
@@ -79,7 +76,6 @@ var upload = multer({
 }).single("profile_pic");
 
 // Start listening at port 3000
-// changed to HTTP instead of app because gave me problems
 http.listen(port, function() {
     console.log("Server is listening at port " + port);
 });
@@ -210,6 +206,7 @@ function loginRequired(req, res, next) {
 
 /* ROUTES are defined below */
 
+// return requested user session
 app.get("/userSession", function(req, res) {
     res.json(req.session.user);
 });
@@ -255,13 +252,13 @@ app.delete("/buddies", loginRequired, function(req, res) {
                 hackerBuddies: req.body.buddy
             }
         },
-        function(err, user) {
+        function(err) {
             if (err) {
                 res.send("error: cannot remove " + req.body.buddy);
             } else {
                 console.log("User removed " + req.body.buddy);
                 res.json({
-                    status: "Successfully reomoved " + req.body.buddy
+                    status: "Successfully removed " + req.body.buddy
                 });
             }
         }

@@ -1,3 +1,41 @@
+var noMatchPrompt = function(showHeart, msg) {
+    "use strict";
+
+    var powerfulQuotes = [{
+        first: "“And suddenly you just know … ",
+        second: "it’s time to start something new and trust the magic of beginnings.” - Meister Eckhart"
+    }, {
+        first: "“It might take a year. It might take a day.",
+        second: "But, what’s meant to be will always find a way.” - Unknown"
+    }, {
+        first: "“We are sometimes taken into troubled waters",
+        second: "not be drowned but to be cleansed.” - Unknown"
+    }, {
+        first: "“Difficult roads",
+        second: "often lead to beautiful destinations.” - Unknown"
+    }, {
+        first: "“Faith and fear both demand you believe",
+        second: "in something you cannot see. You choose.” – Bob Proctor"
+    }];
+
+    var $icon;
+    if (showHeart) {
+        $icon = $("<i>").attr({
+            class: "fa fa-heart-o fa-5x fa-fw margin-bottom",
+            "aria-hidden": "true"
+        });
+    }
+
+    $("span h3").remove();
+    var $h3 = $("<h3>").text(msg);
+    var quote = _.sample(powerfulQuotes);
+    var $p2 = $("<p>").text(quote.first);
+    var $p3 = $("<p>").text(quote.second);
+
+    var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $h3, $p2, $p3).fadeIn(300);
+    $(".wrap").append($span);
+};
+
 var jTinder = function() {
     "use strict";
 
@@ -41,42 +79,6 @@ var jTinder = function() {
         emoji: "😠",
         soundFile: "angry-face.mp3"
     }];
-
-    var noMatchPrompt = function(showHeart, msg) {
-        var powerfulQuotes = [{
-            first: "“And suddenly you just know … ",
-            second: "it’s time to start something new and trust the magic of beginnings.” - Meister Eckhart"
-        }, {
-            first: "“It might take a year. It might take a day.",
-            second: "But, what’s meant to be will always find a way.” - Unknown"
-        }, {
-            first: "“We are sometimes taken into troubled waters",
-            second: "not be drowned but to be cleansed.” - Unknown"
-        }, {
-            first: "“Difficult roads",
-            second: "often lead to beautiful destinations.” - Unknown"
-        }, {
-            first: "“Faith and fear both demand you believe",
-            second: "in something you cannot see. You choose.” – Bob Proctor"
-        }];
-
-        var $icon;
-        if (showHeart) {
-            $icon = $("<i>").attr({
-                class: "fa fa-heart-o fa-5x fa-fw margin-bottom",
-                "aria-hidden": "true"
-            });
-        }
-
-        $("span h3").remove();
-        var $h3 = $("<h3>").text(msg);
-        var quote = _.sample(powerfulQuotes);
-        var $p2 = $("<p>").text(quote.first);
-        var $p3 = $("<p>").text(quote.second);
-
-        var $span = $("<span>").append($icon, $("<br>"), $("<br>"), $("<br>"), $h3, $p2, $p3).fadeIn(300);
-        $(".wrap").append($span);
-    };
 
     var showResult = function() {
         $tinderSlideDiv.delay(800).hide(function() {
@@ -189,17 +191,19 @@ function AppViewModel() {
         success: function(data) {
             if (data.length === 0) {
                 setTimeout(function() {
-                    $(".wrap span i, .wrap span p").fadeOut(function() {
-                        $(".wrap span i, .wrap span p, .wrap span br").remove();
-                        noMatchPrompt(true, "Cannot find your match");
+                    $(".wrap .animation i").fadeOut();
+                    $(".wrap .animation p").fadeOut(function() {
+                        $.when($(".wrap .animation i, .wrap .animation p, .wrap .animation br").remove()).then(
+                            noMatchPrompt(true, "Cannot find your match")
+                        );
                     });
                 }, 2000);
             } else {
                 self.users(data);
                 $tinderSlideDiv.removeClass("hidden");
                 setTimeout(function() {
-                    $(".wrap span i, .wrap span p").fadeOut(function() {
-                        $(".wrap span i, .wrap span p, .wrap span br").remove();
+                    $(".wrap .animation i, .wrap .animation p").fadeOut(function() {
+                        $(".wrap .animation i, .wrap .animation p, .wrap .animation br").remove();
                         $tinderSlideDiv.slideDown();
                         jTinder();
                     });
@@ -207,7 +211,7 @@ function AppViewModel() {
             }
         },
         error: function(error) {
-            $(".wrap span p").text(error.responseText).fadeIn();
+            $(".wrap .animation p").text(error.responseText).fadeIn();
         }
     });
 

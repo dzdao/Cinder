@@ -15,7 +15,6 @@ var main = function() {
         userToSendMesssage = $(this).attr("id").substring(6);
         $("#live-chat").show();
         $("#live-chat h4").text(userToSendMesssage);
-
     });
 
     // handler for submitting chat
@@ -45,9 +44,7 @@ var main = function() {
         //Append current message the user just wrote to her/his chatbox
 
         var $chat_msg = $("<div>").addClass("chat-message clearfix");
-        var $img = $("<img>").attr({
-                "src": "http://gravatar.com/avatar/2c0ad52fc5943b78d6abe069cc08f320?s=32"
-            });
+        var $img = $("<img>");
 
         var $chat_msg_content = $("<div>").addClass("chat-message-content clearfix");
 
@@ -101,11 +98,8 @@ var main = function() {
 
             //Generating chatbox content
             //Append msg to chatbox
-
             var $chat_msg = $("<div>").addClass("chat-message clearfix");
-            var $img = $("<img>").attr({
-                    "src": "http://lorempixum.com/32/32/people"
-                });
+            var $img = $("<img>");
 
             var $chat_msg_content = $("<div>").addClass("chat-message-content clearfix");
 
