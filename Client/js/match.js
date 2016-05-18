@@ -1,3 +1,5 @@
+/*globals $:false, _:false, ko:false */
+
 var noMatchPrompt = function(showHeart, msg) {
     "use strict";
 
