@@ -65,9 +65,6 @@
                     <li class="page-scroll" id="nav-match">
                         <a href="/match">Let Us Chill</a>
                     </li>
-                    <!--<li class="page-scroll">
-                        <a href="#portfolio">Portfolio</a>
-                    </li>-->
                     <li class="page-scroll" id="nav-profile">
                         <a href="/profile">Profile</a>
                     </li>
@@ -86,80 +83,81 @@
 
     <header>
         <div class="container">
-        <h1 style="display: block;">It's a Match</h1>
-        <hr>
-                <!-- start padding container -->
-        <div class="wrap">
-            <span>
-                <i class="fa fa-refresh fa-spin fa-4x fa-fw margin-bottom"></i>
-                <br>
-                <br>
-                <br>
-                <p>Matching...</p>
-            </span>
-            <!-- start jtinder container -->
-            <div class="hidden" id="tinderslide">
-                <ul data-bind="foreach: users">
+            <h1 style="display: block;">It's a Match</h1>
+            <hr>
+            <!-- start padding container -->
+            <div class="wrap">
+                <div class="animation">
+                    <i class="fa fa-refresh fa-spin fa-4x fa-fw margin-bottom"></i>
+                    <br>
+                    <br>
+                    <br>
+                    <p>Matching...</p>
+                </div>
+                <!-- start jtinder container -->
+                <div class="hidden" id="tinderslide">
+                    <ul data-bind="foreach: users">
 
-                    <li class="pane">
-                        <div class="span3 well">
-                            <div class="tile">
-                                <img data-bind="attr: { 'src': '../' + picURL }"
-                                        name="aboutme" width="235" height="235" class="img-thumbnail">
-                                <h3 data-bind="text: first + ' ' + last"></h3>
+                        <li class="pane">
+                            <div class="span3 well">
+                                <div class="tile">
+                                    <img src="img/profile_pic/formal_girl.png" alt="profile picture" data-bind="attr: { 'src': '../' + picURL }" width="235" height="235" class="img-thumbnail">
+                                    <h3 data-bind="text: first + ' ' + last">User's Name</h3>
+                                </div>
+
+                                <div class="chat-button">
+                                    <a href="#aboutModal" data-toggle="modal" data-bind="attr: { 'data-target': '#' + username }" class="btn btn-default" data-dismiss="modal">Hack me out!</a>
+                                </div>
                             </div>
+                        </li>
 
-                            <div class="chat-button">
-                                <a href="#aboutModal" data-toggle="modal" data-bind="attr: { 'data-target': '#' + username }"><button class="btn btn-default" data-dismiss="modal">Hack me out!</button></a>
-                            </div>
-                        </div>
-                    </li>
+                    </ul>
+                </div>
+                <!-- end jtinder container -->
 
-                </ul>
-            </div>
-            <!-- end jtinder container -->
+                <!-- Modal -->
+                <div class="row main" id="userTiles" data-bind="foreach: users">
+                    <div class="modal fade" data-bind="attr: { 'id': username }" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                    <h4 data-bind="text: username" class="modal-title" id="myModalLabel">Username</h4>
+                                </div>
+                                <div class="modal-body">
 
-            <!-- Modal -->
-            <div class="row main" id="userTiles" data-bind="foreach: users">
-                <div class="modal fade" data-bind="attr: { 'id': username }" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                <h4 data-bind="text: username" class="modal-title" id="myModalLabel"></h4>
-                            </div>
-                            <div class="modal-body">
-
-                                    <img data-bind="attr: { 'src': '../' + picURL }" name="aboutme"
-                                        width="140" height="140" border="0" class="img-thumbnail"></a>
-                                    <h3 data-bind="text: first + ' ' + last" class="media-heading"></h3>
+                                    <img src="img/profile_pic/formal_girl.png" data-bind="attr: { 'src': '../' + picURL }" alt="profile picture" width="140" height="140" class="img-thumbnail">
+                                    <h3 data-bind="text: first + ' ' + last" class="media-heading">User's Name</h3>
                                     <span><strong>Languages </strong></span>
                                     <span data-bind="text: language" class="label label-warning"></span>
 
-                                <hr>
-                                    <strong>Variable based on personality: </strong><br>
-                                    <p data-bind="text: variable" class="text-center"></p>
+                                    <hr>
+
+                                    <strong>Variable based on personality: </strong>
                                     <br>
-                                    <strong>Favorite computer scientist: </strong><br>
-                                    <p data-bind="text: scientist" class="text-center"></p>
+                                    <p data-bind="text: variable" class="text-center">Variable</p>
+                                    <br>
+                                    <strong>Favorite computer scientist: </strong>
+                                    <br>
+                                    <p data-bind="text: scientist" class="text-center">Scientist</p>
 
-                            </div>
-                            <div class="modal-footer">
-                            <div class="modal-exit-button">
-                                <button data-bind="text: 'I\'ve heard enough about ' + first" type="button" class="btn btn-default" data-dismiss="modal"></button>
-                            </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="modal-exit-button">
+                                        <button data-bind="text: 'I\'ve heard enough about ' + first" type="button" class="btn btn-default" data-dismiss="modal"></button>
+                                    </div>
 
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- END MODAL -->
+                <!-- END MODAL -->
 
-            <!-- jTinder status text  -->
-            <div id="status"></div>
-        </div>
-    <!-- end padding container -->
+                <!-- jTinder status text  -->
+                <div id="status"></div>
+            </div>
+            <!-- end padding container -->
         </div>
     </header>
 
@@ -170,7 +168,8 @@
                 <div class="row">
                     <div class="footer-col col-md-4">
                         <h3>Location</h3>
-                        <p>3481 Melrose Place<br>Beverly Hills, CA 90210</p>
+                        <p>3481 Melrose Place
+                            <br>Beverly Hills, CA 90210</p>
                     </div>
                     <div class="footer-col col-md-4">
                         <h3>Around the Web</h3>
