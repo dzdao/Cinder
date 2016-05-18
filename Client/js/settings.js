@@ -1,3 +1,5 @@
+/*globals $:false*/
+
 var main = function(userSession) {
     "use strict";
 
