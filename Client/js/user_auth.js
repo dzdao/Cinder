@@ -1,3 +1,5 @@
+/*globals $:false*/
+
 "use strict";
 $(function() {
 
